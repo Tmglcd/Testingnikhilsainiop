@@ -730,7 +730,7 @@ async def cmd(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id})\nChoose Button to set Thumbnail**"
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎥 Video", callback_data="viideo_thumbnail_command"), InlineKeyboardButton("📑 PDF", callback_data="pddf_thumbnail_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -747,7 +747,7 @@ async def cmd(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id})\nChoose Button to set Watermark**"
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎥 Video", callback_data="video_watermark_command"), InlineKeyboardButton("📑 PDF", callback_data="pdf_watermark_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -765,7 +765,7 @@ async def cmd(client, callback_query):
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("Classplus", callback_data="cp_token_command")],
         [InlineKeyboardButton("Physics Wallah", callback_data="pw_token_command"), InlineKeyboardButton("Carrerwill", callback_data="cw_token_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -779,22 +779,22 @@ async def cmd(client, callback_query):
 async def handle_caption(client, callback_query):
     global caption
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(
         "**Caption Style 1**\n"
-        "<blockquote expandable><b>[🎥]Vid Id</b> : {str(count).zfill(3)}\n"
+        "<b>[🎥]Vid Id</b> : {str(count).zfill(3)}\n"
         "**Video Title :** `{name1} [{res}p].{ext}`\n"
         "<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n"
-        "**Extracted by➤**{CR}</blockquote>\n\n"
+        "**Extracted by➤**{CR}\n\n"
         "**Caption Style 2**\n"
-        "<blockquote expandable>**——— ✦ {str(count).zfill(3)} ✦ ———**\n\n"
+        "**——— ✦ {str(count).zfill(3)} ✦ ———**\n\n"
         "🎞️ **Title** : `{name1}`\n"
         "**├── Extention :  {extension}.{ext}**\n"
         "**├── Resolution : [{res}]**\n"
         "📚 **Course : {b_name}**\n\n"
-        "🌟 **Extracted By : {credit}**</blockquote>\n\n"
+        "🌟 **Extracted By : {credit}**\n\n"
         "**Caption Style 3**\n"
-        "<blockquote expandable>**{str(count).zfill(3)}. {name1} [{res}p].{ext}**</blockquote>\n\n"
+        "**{str(count).zfill(3)}.** {name1} [{res}p].{ext}\n\n"
         "**Send Your Caption Style eg. /cc1 or /cc2 or /cc3**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -817,7 +817,7 @@ async def handle_caption(client, callback_query):
 async def handle_caption(client, callback_query):
     global filename
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit("**Send End File Name or Send /d**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -875,7 +875,7 @@ async def pdf_thumbnail_button(client, callback_query):
 async def credit(client, callback_query):
     global CR
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"Send Credit Name or Send /d", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
 
@@ -1020,9 +1020,9 @@ async def handle_quality(client, callback_query):
             res = '1920x1080'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         else:
-            raw_text2 = '1080'
+            raw_text2 = '480'
             quality = f"{raw_text2}p"
-            res = '1920x1080'
+            res = '854x480'
             await editable.edit(f"✅ Video Quality set {quality} as Default !", reply_markup=keyboard)
             
     except Exception as e:
