@@ -459,19 +459,6 @@ async def getcookies_handler(client: Client, m: Message):
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")
 
 
-@bot.on_message(filters.command("topic") & filters.private)
-async def topic_handler(client: Client, m: Message):
-    global topic
-    editable = await m.reply_text("**If you want to topic wise uploader : send `yes` or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>")
-    input: Message = await bot.listen(editable.chat.id)
-    topic = input.text
-    if topic == "yes":
-        await editable.edit(f"**Topic Wise Uploading On ✅**")
-    else:
-        await editable.edit(f"**Topic Wise Uploading Off ✅**")
-    await input.delete(True)
-
-       
 @bot.on_message(filters.command(["reset"]))
 async def restart_handler(_, m):
     if m.chat.id != OWNER:
@@ -1016,7 +1003,28 @@ async def handle_quality(client, callback_query):
     finally:
         await input_msg.delete()
 
-        
+@bot.on_callback_query(filters.regex("topic"))
+async def video_watermark(client, callback_query):
+    global topic
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(f"**If you want to enable topic in caption: send /yes or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+
+    try:
+        if input_msg.text.lower() == "/yes":
+            topic = "/yes"
+            await editable.edit(f"**Topic enabled in Caption ✅** !", reply_markup=keyboard)
+
+        else:
+            topic = input_msg.text
+            await editable.edit(f"Topic disabled in Caption ✅!", reply_markup=keyboard)
+
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set Topic in Caption:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
+
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
   caption = "**✨ My Premium BOT Features :**"
