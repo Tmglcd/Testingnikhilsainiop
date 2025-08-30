@@ -457,18 +457,6 @@ async def getcookies_handler(client: Client, m: Message):
     except Exception as e:
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")
 
-@bot.on_message(filters.command("caption") & filters.private)
-async def caption_handler(client: Client, m: Message):
-    global caption
-    editable = await m.reply_text("**Caption Style**\n\n<b>01 •Send /d for Default Caption Style.\n02. •Send /simple for Simple Caption Style.</b>")
-    inputcap: Message = await bot.listen(editable.chat.id)
-    caption = inputcap.text
-    if caption == '/d':
-        await editable.edit(f"**Caption Set in Default Style ✅**")
-    else:
-        await editable.edit(f"**Caption Set in Normal Style ✅**")
-    await inputcap.delete(True)
-
 @bot.on_message(filters.command("vidwatermark") & filters.private)
 async def vidwatermark_handler(client: Client, m: Message):
     global vidwatermark
@@ -821,6 +809,44 @@ async def cmd(client, callback_query):
     ),
     reply_markup=keyboard
     )
+
+@bot.on_callback_query(filters.regex("caption_style_command"))
+async def handle_caption(client, callback_query):
+    global caption
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(
+        "**Caption Style 1**\n"
+        "<b>[🎥]Vid Id</b> : {str(count).zfill(3)}\n"
+        "**Video Title :** `{name1} [{res}p].{ext}`\n"
+        "<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n"
+        "**Extracted by➤**{CR}\n\n"
+        "**Caption Style 2**\n"
+        "**——— ✦ {str(count).zfill(3)} ✦ ———**\n\n"
+        "🎞️ **Title** : `{name1}`\n"
+        "**├── Extention :  {extension}.{ext}**\n"
+        "**├── Resolution : [{res}]**\n"
+        "📚 **Course : {b_name}**\n\n"
+        "🌟 **Extracted By : {credit}**\n\n"
+        "**Caption Style 3**\n"
+        "**{str(count).zfill(3)}. {name1} [{res}p].{ext}**\n\n"
+        "**Send Your Caption Style eg. /cc1 or /cc2 or /cc3**", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+    try:
+        if input_msg.text.lower() == "/cc1":
+            caption = '/cc1'
+            await editable.edit(f"✅ Caption Style 1 Updated!", reply_markup=keyboard)
+        elif input_msg.text.lower() == "/cc2":
+            caption = '/cc2'
+            await editable.edit(f"✅ Caption Style 2 Updated!", reply_markup=keyboard)
+        elif:
+            caption = input_msg.text
+            await editable.edit(f"✅ Caption Style 3 Updated!", reply_markup=keyboard)
+            
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set Caption Style:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
 
 
 @bot.on_callback_query(filters.regex("feat_command"))
@@ -1308,7 +1334,7 @@ async def txt_handler(bot: Client, m: Message):
                         ccm = f'[🎵]Audio Id : {str(count).zfill(3)}\n**Audio Title :** `{name1} .mp3`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                         cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{name1} .html`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                 else:
-                    cc = f'**{str(count).zfill(3)}) {name1} [{res}p] .mkv**'
+                    cc = f'**{str(count).zfill(3)}. {name1} [{res}p] .mkv**'
                     cc1 = f'**{str(count).zfill(3)}) {name1} .pdf**'
                     cczip = f'**{str(count).zfill(3)}) {name1} .zip**'
                     ccimg = f'**{str(count).zfill(3)}) {name1} .jpg**'
