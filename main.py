@@ -871,6 +871,28 @@ async def pdf_thumbnail_button(client, callback_query):
     reply_markup=keyboard
   )
 
+@bot.on_callback_query(filters.regex("add_credit_command"))
+async def credit(client, callback_query):
+    global CR
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(f"Send Credit Name or Send /d", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+
+    try:
+        if input_msg.text.lower() == "/d":
+            CR = f"{CREDIT}"
+            await editable.edit(f"✅ Credit set to default !", reply_markup=keyboard)
+
+        else:
+            CR = input_msg.text
+            await editable.edit(f"✅ Credit set as {CR} !", reply_markup=keyboard)
+
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set Credit:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
+        
 @bot.on_callback_query(filters.regex("cp_token_command"))
 async def handle_token(client, callback_query):
     global cptoken
@@ -1029,6 +1051,39 @@ async def video_watermark(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Topic in Caption:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
+
+@bot.on_callback_query(filters.regex("reset_command"))
+async def credit(client, callback_query):
+    global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(f"If you want to reset settings send /yes or Send /no", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+
+    try:
+        if input_msg.text.lower() == "/yes":
+            caption = '/cc1'
+            filename = '/d'
+            thumb = '/d'
+            CR = f"{CREDIT}"
+            cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
+            cptoken = "cptoken"
+            pwtoken = "pwtoken"
+            vidwatermark = '/d'
+            raw_text2 = '480'
+            quality = '480p'
+            res = '854x480'
+            topic = '/d'
+            await editable.edit(f"✅ Settings reset as default !", reply_markup=keyboard)
+
+        else:
+            await editable.edit(f"✅ Settings Not Changed !", reply_markup=keyboard)
+
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to Change Settings:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
+
 
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
@@ -1203,7 +1258,7 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
 
 @bot.on_message(filters.command(["drm"]) )
 async def txt_handler(bot: Client, m: Message):  
-    global processing_request, cancel_requested, cancel_message, caption, vidwatermark, cwtoken, pwtoken, cptoken, topic
+    global processing_request, cancel_requested, cancel_message, caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
     user_id = m.from_user.id
@@ -2022,10 +2077,6 @@ def reset_and_set_commands():
         {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
         {"command": "drm", "description": "📑 Upload .txt file"},
         {"command": "cookies", "description": "📁 Upload YT Cookies"},
-        {"command": "caption", "description": "🖊️ Change Caption Style"},
-        {"command": "topic", "description": "🎩 Topic Wise Uploading"},
-        {"command": "vidwatermark", "description": "💦 Change Video Watermark"},
-        {"command": "token", "description": "🖋️ Update CP/CW/PW Token"},
         {"command": "y2t", "description": "🔪 YouTube → .txt Converter"},
         {"command": "ytm", "description": "🎶 YouTube → .mp3 downloader"},
         {"command": "t2t", "description": "📟 Text → .txt Generator"},
