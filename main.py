@@ -902,7 +902,7 @@ async def handle_token(client, callback_query):
     input_msg = await bot.listen(editable.chat.id)
     try:
         cptoken = input_msg.text
-        await editable.edit(f"✅ Classplus Token set successfully\n\n`{cptoken}`!", reply_markup=keyboard)
+        await editable.edit(f"✅ Classplus Token set successfully !\n\n<blockquote expandable>`{cptoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Classplus Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -918,7 +918,7 @@ async def handle_token(client, callback_query):
     input_msg = await bot.listen(editable.chat.id)
     try:
         pwtoken = input_msg.text
-        await editable.edit(f"✅ Physics Wallah Token set successfully\n\n`{pwtoken}`!", reply_markup=keyboard)
+        await editable.edit(f"✅ Physics Wallah Token set successfully !\n\n<blockquote expandable>`{pwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Physics Wallah Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -939,7 +939,7 @@ async def handle_token(client, callback_query):
 
         else:
             cwtoken = input_msg.text
-            await editable.edit(f"✅ Carrerwill Token set successfully\n\n`{cwtoken}`!", reply_markup=keyboard)
+            await editable.edit(f"✅ Carrerwill Token set successfully !\n\n<blockquote expandable>`{cwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Careerwill Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
