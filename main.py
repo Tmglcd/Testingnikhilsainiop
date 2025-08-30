@@ -804,7 +804,7 @@ async def handle_caption(client, callback_query):
         elif input_msg.text.lower() == "/cc2":
             caption = '/cc2'
             await editable.edit(f"✅ Caption Style 2 Updated!", reply_markup=keyboard)
-        elif:
+        else:
             caption = input_msg.text
             await editable.edit(f"✅ Caption Style 3 Updated!", reply_markup=keyboard)
             
