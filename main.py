@@ -946,7 +946,7 @@ async def handle_token(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("video_thumbnail_command"))
+@bot.on_callback_query(filters.regex("video_watermark_command"))
 async def video_watermark(client, callback_query):
     global vidwatermark
     user_id = callback_query.from_user.id
@@ -1030,7 +1030,7 @@ async def handle_quality(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("topic"))
+@bot.on_callback_query(filters.regex("topic_command"))
 async def video_watermark(client, callback_query):
     global topic
     user_id = callback_query.from_user.id
@@ -1052,7 +1052,7 @@ async def video_watermark(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("reset_command"))
+@bot.on_callback_query(filters.regex("reset_settings_command"))
 async def credit(client, callback_query):
     global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     user_id = callback_query.from_user.id
