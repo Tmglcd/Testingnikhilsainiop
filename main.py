@@ -1052,7 +1052,7 @@ async def video_watermark(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("reset_settings_command"))
+@bot.on_callback_query(filters.regex("reset_command"))
 async def credit(client, callback_query):
     global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     user_id = callback_query.from_user.id
