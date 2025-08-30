@@ -711,7 +711,7 @@ async def settings_button(client, callback_query):
         [InlineKeyboardButton("✍️ Add Credit", callback_data="add_credit_command"), InlineKeyboardButton("🔏 Set Token", callback_data="set_token_command")],
         [InlineKeyboardButton("💧 Watermark", callback_data="wattermark_command")],
         [InlineKeyboardButton("📽️ Video Quality", callback_data="quality_command"), InlineKeyboardButton("🏷️ Topic", callback_data="topic_command")],
-        [InlineKeyboardButton("🔄 Reset", callback_data="resset_command")]
+        [InlineKeyboardButton("🔄 Reset", callback_data="resset_command")],
         [InlineKeyboardButton("🔙 Back to Main Menu", callback_data="back_to_main_menu")]
     ])
 
