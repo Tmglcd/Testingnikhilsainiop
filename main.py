@@ -540,7 +540,7 @@ async def start(bot, m: Message):
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Setttings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -555,7 +555,7 @@ async def start(bot, m: Message):
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Setttings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -571,7 +571,7 @@ async def back_to_main_menu(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id}) in My uploader bot**"
     keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Setttings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -702,16 +702,16 @@ async def upgrade_button(client, callback_query):
     reply_markup=keyboard
     )
 
-@bot.on_callback_query(filters.regex("settings"))
+@bot.on_callback_query(filters.regex("setttings"))
 async def settings_button(client, callback_query):
     caption = "✨ <b>My Premium BOT Settings Panel</b> ✨"
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("📝 Caption Style", callback_data="caption_style_command"), InlineKeyboardButton("🖋️ File Name", callback_data="file_name_command")],
-        [InlineKeyboardButton("🌅 Thumbnail", callback_data="thumbnail_command")],
+        [InlineKeyboardButton("🌅 Thumbnail", callback_data="thummbnail_command")],
         [InlineKeyboardButton("✍️ Add Credit", callback_data="add_credit_command"), InlineKeyboardButton("🔏 Set Token", callback_data="set_token_command")],
-        [InlineKeyboardButton("💧 Watermark", callback_data="watermark_command")],
-        [InlineKeyboardButton("📽️ Video Quality", callback_data="video_quality_command"), InlineKeyboardButton("🏷️ Topic", callback_data="topic_command")],
-        [InlineKeyboardButton("🔄 Reset", callback_data="reset_command")]
+        [InlineKeyboardButton("💧 Watermark", callback_data="wattermark_command")],
+        [InlineKeyboardButton("📽️ Video Quality", callback_data="quality_command"), InlineKeyboardButton("🏷️ Topic", callback_data="topic_command")],
+        [InlineKeyboardButton("🔄 Reset", callback_data="resset_command")]
         [InlineKeyboardButton("🔙 Back to Main Menu", callback_data="back_to_main_menu")]
     ])
 
@@ -723,13 +723,13 @@ async def settings_button(client, callback_query):
     reply_markup=keyboard
     )
 
-@bot.on_callback_query(filters.regex("thumbnail_command"))
+@bot.on_callback_query(filters.regex("thummbnail_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
     first_name = callback_query.from_user.first_name
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id})\nChoose Button to set Thumbnail**"
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎥 Video", callback_data="video_thumbnail_command"), InlineKeyboardButton("📑 PDF", callback_data="pdf_thumbnail_command")],
+        [InlineKeyboardButton("🎥 Video", callback_data="viideo_thumbnail_command"), InlineKeyboardButton("📑 PDF", callback_data="pddf_thumbnail_command")],
         [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
     ])
     await callback_query.message.edit_media(
@@ -740,7 +740,7 @@ async def cmd(client, callback_query):
     reply_markup=keyboard
     )
 
-@bot.on_callback_query(filters.regex("watermark_command"))
+@bot.on_callback_query(filters.regex("wattermark_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
     first_name = callback_query.from_user.first_name
@@ -833,11 +833,11 @@ async def handle_caption(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("video_thumbnail_command"))
+@bot.on_callback_query(filters.regex("viideo_thumbnail_command"))
 async def video_thumbnail(client, callback_query):
     global thumb
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="thummbnail_command")]])
     editable = await callback_query.message.edit(f"Send the Video Thumb URL or Send /d \n<blockquote><b>Note </b>- For document format send : No</blockquote>", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
 
@@ -859,9 +859,9 @@ async def video_thumbnail(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("pdf_thumbnail_command"))
+@bot.on_callback_query(filters.regex("pddf_thumbnail_command"))
 async def pdf_thumbnail_button(client, callback_query):
-  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="thummbnail_command")]])
   caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
   await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -897,7 +897,7 @@ async def credit(client, callback_query):
 async def handle_token(client, callback_query):
     global cptoken
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Classplus Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -913,7 +913,7 @@ async def handle_token(client, callback_query):
 async def handle_token(client, callback_query):
     global pwtoken
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Physics Wallah Same Batch Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -929,7 +929,7 @@ async def handle_token(client, callback_query):
 async def handle_token(client, callback_query):
     global cwtoken
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Carrerwill Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -950,7 +950,7 @@ async def handle_token(client, callback_query):
 async def video_watermark(client, callback_query):
     global vidwatermark
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="wattermark_command")]])
     editable = await callback_query.message.edit(f"**Send Video Watermark text or Send /d**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
 
@@ -971,7 +971,7 @@ async def video_watermark(client, callback_query):
 
 @bot.on_callback_query(filters.regex("pdf_watermark_command"))
 async def pdf_watermark_button(client, callback_query):
-  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="wattermark_command")]])
   caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
   await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -981,11 +981,11 @@ async def pdf_watermark_button(client, callback_query):
     reply_markup=keyboard
   )
 
-@bot.on_callback_query(filters.regex("video_quality_command"))
+@bot.on_callback_query(filters.regex("quality_command"))
 async def handle_quality(client, callback_query):
     global raw_text2, quality, res
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit("__**Enter resolution or Video Quality (`144`, `240`, `360`, `480`, `720`, `1080`) or Send /d**__", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
@@ -1034,7 +1034,7 @@ async def handle_quality(client, callback_query):
 async def video_watermark(client, callback_query):
     global topic
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"**If you want to enable topic in caption: send /yes or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
 
@@ -1052,11 +1052,11 @@ async def video_watermark(client, callback_query):
     finally:
         await input_msg.delete()
 
-@bot.on_callback_query(filters.regex("reset_command"))
+@bot.on_callback_query(filters.regex("resset_command"))
 async def credit(client, callback_query):
     global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     user_id = callback_query.from_user.id
-    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"If you want to reset settings send /yes or Send /no", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
 
