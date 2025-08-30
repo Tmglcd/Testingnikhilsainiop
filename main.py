@@ -869,6 +869,45 @@ async def handle_caption(client, callback_query):
     finally:
         await input_msg.delete()
 
+@bot.on_callback_query(filters.regex("video_thumbnail_command"))
+async def handle_videothumbnail(client, callback_query):
+    global thumb
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(f"Send the Video Thumb URL or Send /d \n<blockquote><b>Note </b>- For document format send : No</blockquote>", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+
+    try:
+        if input_msg.text.startswith("http://") or input_msg.text.startswith("https://"):
+            thumb = input_msg.text
+            await editable.edit(f"✅ Thumbnail set successfully from the URL !", reply_markup=keyboard)
+
+        elif input_msg.text.lower() == "/d":
+            thumb = "/d"
+            await editable.edit(f"✅ Thumbnail set to default !", reply_markup=keyboard)
+
+        else:
+            thumb = input_msg.text
+            await editable.edit(f"✅ Video in Document Format is enabled !", reply_markup=keyboard)
+
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set thumbnail:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
+
+@bot.on_callback_query(filters.regex("pdf_thumbnail_command"))
+async def y2t_button(client, callback_query):
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Features", callback_data="show_features")]])
+  caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
+  await callback_query.message.edit_media(
+    InputMediaPhoto(
+        media="https://envs.sh/GVI.jpg",
+        caption=caption
+    ),
+    reply_markup=keyboard
+  )
+    
+
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
   caption = "**✨ My Premium BOT Features :**"
