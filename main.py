@@ -1332,92 +1332,18 @@ async def txt_handler(bot: Client, m: Message):
         await m.reply_text("**🔹Exiting Task......  **")
         return
 
-    await editable.edit(f"**If You Want Set All Value Default then Send /d Otherwise Send /no**")
+    await editable.edit(f"**Enter Batch Name or send /d**")
     try:
-        inputall: Message = await bot.listen(editable.chat.id, timeout=20)
-        raw_textall = inputall.text
-        await inputall.delete(True)
+        input1: Message = await bot.listen(editable.chat.id, timeout=20)
+        raw_text0 = input1.text
+        await input1.delete(True)
     except asyncio.TimeoutError:
-        raw_textall = '/d'
-    
-    if raw_textall == '/d':
-        b_name = file_name.replace('_', ' ')
-        raw_text2 = '480'
-        res = "854x480"
-        quality = f"{raw_text2}p"
-        raw_text3 = '/d'
-        CR = f"{CREDIT}"
-        raw_text6 = '/d'
-        thumb = raw_text6
-    else:
-        await editable.edit(f"**Enter Batch Name or send /d**")
-        try:
-            input1: Message = await bot.listen(editable.chat.id, timeout=20)
-            raw_text0 = input1.text
-            await input1.delete(True)
-        except asyncio.TimeoutError:
-            raw_text0 = '/d'
+        raw_text0 = '/d'
       
-        if raw_text0 == '/d':
-            b_name = file_name.replace('_', ' ')
-        else:
-            b_name = raw_text0
-     
-        await editable.edit("__**Enter resolution or Video Quality (`144`, `240`, `360`, `480`, `720`, `1080`)**__")
-        try:
-            input2: Message = await bot.listen(editable.chat.id, timeout=20)
-            raw_text2 = input2.text
-            await input2.delete(True)
-        except asyncio.TimeoutError:
-            raw_text2 = '480'
-        quality = f"{raw_text2}p"
-        try:
-            if raw_text2 == "144":
-                res = "256x144"
-            elif raw_text2 == "240":
-                res = "426x240"
-            elif raw_text2 == "360":
-                res = "640x360"
-            elif raw_text2 == "480":
-                res = "854x480"
-            elif raw_text2 == "720":
-                res = "1280x720"
-            elif raw_text2 == "1080":
-                res = "1920x1080" 
-            else: 
-                res = "UN"
-        except Exception:
-                res = "UN"
-
-        await editable.edit(f"**Enter the Credit Name or send /d\n\n<blockquote><b>Format:</b>\n🔹Send __Admin__ only for caption\n🔹Send __Admin,filename__ for caption and file...Separate them with a comma (,)</blockquote>**")
-        try:
-            input3: Message = await bot.listen(editable.chat.id, timeout=20)
-            raw_text3 = input3.text
-            await input3.delete(True)
-        except asyncio.TimeoutError:
-            raw_text3 = '/d'
-        
-        if raw_text3 == '/d':
-            CR = f"{CREDIT}"
-        elif "," in raw_text3:
-            CR, PRENAME = raw_text3.split(",")
-        else:
-            CR = raw_text3
-     
-        await editable.edit(f"**Send the Video Thumb URL or send /d**")
-        try:
-            input6: Message = await bot.listen(editable.chat.id, timeout=20)
-            raw_text6 = input6.text
-            await input6.delete(True)
-        except asyncio.TimeoutError:
-            raw_text6 = '/d'
-
-        if raw_text6.startswith("http://") or raw_text6.startswith("https://"):
-            # If a URL is provided, download thumbnail from the URL
-            getstatusoutput(f"wget '{raw_text6}' -O 'thumb.jpg'")
-            thumb = "thumb.jpg"
-        else:
-            thumb = raw_text6
+    if raw_text0 == '/d':
+        b_name = file_name.replace('_', ' ')
+    else:
+        b_name = raw_text0
 
     await editable.edit("__**⚠️Provide the Channel ID or send /d__\n\n<blockquote><i>🔹 Make me an admin to upload.\n🔸Send /id in your channel to get the Channel ID.\n\nExample: Channel ID = -100XXXXXXXXXXX</i></blockquote>\n**")
     try:
@@ -1432,6 +1358,12 @@ async def txt_handler(bot: Client, m: Message):
     else:
         channel_id = raw_text7    
     await editable.delete()
+
+    if thumb.startswith("http://") or thumb.startswith("https://"):
+        getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
+        thumb = "thumb.jpg"
+    else:
+        thumb = thumb
 
     try:
         if raw_text == "1":
@@ -1465,12 +1397,12 @@ async def txt_handler(bot: Client, m: Message):
             link0 = "https://" + Vxy
 
             name1 = links[i][0].replace("(", "[").replace(")", "]").replace("_", "").replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
-            if "," in raw_text3:
-                name = f'{str(count).zfill(3)}) {PRENAME} {name1[:60]}'
-                namef = f'{PRENAME} {name1[:60]}'
-            else:
+            if filename == "/d":
                 name = f'{str(count).zfill(3)}) {name1[:60]}'
                 namef = f'{name1[:60]}'
+            else:
+                name = f'{str(count).zfill(3)}) {name1[:60]} {filename}'
+                namef = f'{name1[:60]} {filename}'
             
             if "visionias" in url:
                 async with ClientSession() as session:
@@ -1542,19 +1474,19 @@ async def txt_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
 
             try:
-                if caption == "/d":
-                    if topic == "yes":
-                        raw_title = links[i][0]
-                        t_match = re.search(r"[\(\[]([^\)\]]+)[\)\]]", raw_title)
-                        if t_match:
-                            t_name = t_match.group(1).strip()
-                            v_name = re.sub(r"^[\(\[][^\)\]]+[\)\]]\s*", "", raw_title)
-                            v_name = re.sub(r"[\(\[][^\)\]]+[\)\]]", "", v_name)
-                            v_name = re.sub(r":.*", "", v_name).strip()
-                        else:
-                            t_name = "Untitled"
-                            v_name = re.sub(r":.*", "", raw_title).strip()
+                if topic == "/yes":
+                    raw_title = links[i][0]
+                    t_match = re.search(r"[\(\[]([^\)\]]+)[\)\]]", raw_title)
+                    if t_match:
+                        t_name = t_match.group(1).strip()
+                        v_name = re.sub(r"^[\(\[][^\)\]]+[\)\]]\s*", "", raw_title)
+                        v_name = re.sub(r"[\(\[][^\)\]]+[\)\]]", "", v_name)
+                        v_name = re.sub(r":.*", "", v_name).strip()
+                    else:
+                        t_name = "Untitled"
+                        v_name = re.sub(r":.*", "", raw_title).strip()
                     
+                    if caption == "/cc1":
                         cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} [{res}p] .mkv`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
                         cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{v_name} .pdf`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
                         cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{v_name} .zip`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
@@ -1562,20 +1494,42 @@ async def txt_handler(bot: Client, m: Message):
                         cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{v_name} .html`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
                         ccyt = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} .mp4`\n<a href="{url}">__**Click Here to Watch Stream**__</a>\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
                         ccm = f'[🎵]Mp3 Id : {str(count).zfill(3)}\n**Audio Title :** `{v_name} .mp3`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                    elif caption == "/cc2":
+                        cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>🎞️ Title : {v_name}</b>\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>📁 Title : {v_name}</b>\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>📒 Title : {v_name}</b>\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>🖼️ Title : {v_name}</b>\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>🎵 Title : {v_name}</b>\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n\n<b>🌐 Title : {v_name}</b>\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
                     else:
+                        cc = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} [{res}p] .mkv'
+                        cc1 = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} .pdf'
+                        cczip = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} .zip'
+                        ccimg = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} .jpg'
+                        ccm = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} .mp3'
+                        cchtml = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n{str(count).zfill(3)}. {name1} .html'
+                else:
+                    if caption == "/cc1":
                         cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{name1} [{res}p] .mkv`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                         cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{name1} .pdf`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                         cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{name1} .zip`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n' 
                         ccimg = f'[🖼️]Img Id : {str(count).zfill(3)}\n**Img Title :** `{name1} .jpg`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                         ccm = f'[🎵]Audio Id : {str(count).zfill(3)}\n**Audio Title :** `{name1} .mp3`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
                         cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{name1} .html`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                else:
-                    cc = f'**{str(count).zfill(3)}. {name1} [{res}p] .mkv**'
-                    cc1 = f'**{str(count).zfill(3)}) {name1} .pdf**'
-                    cczip = f'**{str(count).zfill(3)}) {name1} .zip**'
-                    ccimg = f'**{str(count).zfill(3)}) {name1} .jpg**'
-                    ccm = f'**{str(count).zfill(3)}) {name1} .mp3**'
-                    cc1html = f'**{str(count).zfill(3)}) {name1} .html**'
+                    elif caption == "/cc2":
+                        cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎞️ Title : {name1}</b>\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📁 Title : {name1}</b>\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📒 Title : {name1}</b>\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🖼️ Title : {name1}</b>\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎵 Title : {name1}</b>\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🌐 Title : {name1}</b>\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                    else:
+                        cc = f'{str(count).zfill(3)}. {name1} [{res}p] .mkv'
+                        cc1 = f'{str(count).zfill(3)}. {name1} .pdf'
+                        cczip = f'{str(count).zfill(3)}. {name1} .zip'
+                        ccimg = f'{str(count).zfill(3)}. {name1} .jpg'
+                        ccm = f'{str(count).zfill(3)}. {name1} .mp3'
+                        cchtml = f'{str(count).zfill(3)}. {name1} .html'
                     
                 if "drive" in url:
                     try:
