@@ -824,7 +824,7 @@ async def handle_caption(client, callback_query):
         if input_msg.text.lower() == "/d":
             filename = '/d'
             await editable.edit(f"✅ End File Name Disabled !", reply_markup=keyboard)
-        elif:
+        else:
             filename = input_msg.text
             await editable.edit(f"✅ End File Name `{filename}` is enabled!", reply_markup=keyboard)
             
