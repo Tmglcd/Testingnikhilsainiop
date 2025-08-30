@@ -749,6 +749,28 @@ async def upgrade_button(client, callback_query):
     reply_markup=keyboard
     )
 
+@bot.on_callback_query(filters.regex("settings_command"))
+async def settings_button(client, callback_query):
+    caption = "✨ <b>My Premium BOT Settings Panel</b> ✨"
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📝 Caption Style", callback_data="caption_style_command"), InlineKeyboardButton("🖋️ File Name", callback_data="file_name_command")],
+        [InlineKeyboardButton("🌅 Thumbnail", callback_data="thumbnail_command")],
+        [InlineKeyboardButton("✍️ Add Credit", callback_data="add_credit_command"), InlineKeyboardButton("🔏 Set Token", callback_data="set_token_command")],
+        [InlineKeyboardButton("💧 Watermark", callback_data="watermark_command")],
+        [InlineKeyboardButton("📽️ Video Quality", callback_data="video_quality_command"), InlineKeyboardButton("🏷️ Topic", callback_data="topic_command")],
+        [InlineKeyboardButton("🔄 Reset", callback_data="reset_settings_command")
+        [InlineKeyboardButton("🔙 Back to Main Menu", callback_data="back_to_main_menu")]
+    ])
+
+    await callback_query.message.edit_media(
+    InputMediaPhoto(
+      media="https://envs.sh/GVI.jpg",
+      caption=caption
+    ),
+    reply_markup=keyboard
+    )
+
+
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
   caption = "**✨ My Premium BOT Features :**"
