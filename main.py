@@ -548,7 +548,7 @@ async def start(bot, m: Message):
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -563,7 +563,7 @@ async def start(bot, m: Message):
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -579,7 +579,7 @@ async def back_to_main_menu(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id}) in My uploader bot**"
     keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -710,7 +710,7 @@ async def upgrade_button(client, callback_query):
     reply_markup=keyboard
     )
 
-@bot.on_callback_query(filters.regex("settings_command"))
+@bot.on_callback_query(filters.regex("settings"))
 async def settings_button(client, callback_query):
     caption = "✨ <b>My Premium BOT Settings Panel</b> ✨"
     keyboard = InlineKeyboardMarkup([
@@ -738,7 +738,7 @@ async def cmd(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id})\nChoose Button to set Thumbnail**"
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎥 Video", callback_data="video_thumbnail_command"), InlineKeyboardButton("📑 PDF", callback_data="pdf_thumbnail_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings_command")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -755,7 +755,7 @@ async def cmd(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id})\nChoose Button to set Watermark**"
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🎥 Video", callback_data="video_watermark_command"), InlineKeyboardButton("📑 PDF", callback_data="pdf_watermark_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings_command")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -773,7 +773,7 @@ async def cmd(client, callback_query):
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("Classplus", callback_data="cp_token_command")],
         [InlineKeyboardButton("Physics Wallah", callback_data="pw_token_command"), InlineKeyboardButton("Carrerwill", callback_data="cw_token_command")],
-        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings_command")]
+        [InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]
     ])
     await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -967,7 +967,56 @@ async def pdf_watermark_button(client, callback_query):
     reply_markup=keyboard
   )
 
+@bot.on_callback_query(filters.regex("video_quality_command"))
+async def handle_quality(client, callback_query):
+    global raw_text2, quality, res
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit("__**Enter resolution or Video Quality (`144`, `240`, `360`, `480`, `720`, `1080`) or Send /d**__", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+    try:
+        if input_msg.text.lower() == "144":
+            raw_text2 = '144'
+            quality = f"{raw_text2}p"
+            res = '256x144'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        elif input_msg.text.lower() == "240":
+            raw_text2 = '240'
+            quality = f"{raw_text2}p"
+            res = '426x240'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        elif input_msg.text.lower() == "360":
+            raw_text2 = '360'
+            quality = f"{raw_text2}p"
+            res = '640x360'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        elif input_msg.text.lower() == "480":
+            raw_text2 = '480'
+            quality = f"{raw_text2}p"
+            res = '854x480'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        elif input_msg.text.lower() == "720":
+            raw_text2 = '720'
+            quality = f"{raw_text2}p"
+            res = '1280x720'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        elif input_msg.text.lower() == "1080":
+            raw_text2 = '1080'
+            quality = f"{raw_text2}p"
+            res = '1920x1080'
+            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+        else:
+            raw_text2 = '1080'
+            quality = f"{raw_text2}p"
+            res = '1920x1080'
+            await editable.edit(f"✅ Video Quality set {quality} as Default !", reply_markup=keyboard)
+            
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set Video Quality:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
 
+        
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
   caption = "**✨ My Premium BOT Features :**"
