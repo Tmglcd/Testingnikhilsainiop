@@ -817,19 +817,19 @@ async def handle_caption(client, callback_query):
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
     editable = await callback_query.message.edit(
         "**Caption Style 1**\n"
-        "<b>[🎥]Vid Id</b> : {str(count).zfill(3)}\n"
+        "<blockquote expandable><b>[🎥]Vid Id</b> : {str(count).zfill(3)}\n"
         "**Video Title :** `{name1} [{res}p].{ext}`\n"
         "<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n"
-        "**Extracted by➤**{CR}\n\n"
+        "**Extracted by➤**{CR}</blockquote>\n\n"
         "**Caption Style 2**\n"
-        "**——— ✦ {str(count).zfill(3)} ✦ ———**\n\n"
+        "<blockquote expandable>**——— ✦ {str(count).zfill(3)} ✦ ———**\n\n"
         "🎞️ **Title** : `{name1}`\n"
         "**├── Extention :  {extension}.{ext}**\n"
         "**├── Resolution : [{res}]**\n"
         "📚 **Course : {b_name}**\n\n"
-        "🌟 **Extracted By : {credit}**\n\n"
+        "🌟 **Extracted By : {credit}**</blockquote>\n\n"
         "**Caption Style 3**\n"
-        "**{str(count).zfill(3)}. {name1} [{res}p].{ext}**\n\n"
+        "<blockquote expandable>**{str(count).zfill(3)}. {name1} [{res}p].{ext}**</blockquote>\n\n"
         "**Send Your Caption Style eg. /cc1 or /cc2 or /cc3**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
