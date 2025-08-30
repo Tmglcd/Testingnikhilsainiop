@@ -586,7 +586,8 @@ async def start(bot, m: Message):
     await asyncio.sleep(1)
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("🕸️ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -600,7 +601,8 @@ async def start(bot, m: Message):
     else:
         await asyncio.sleep(2)
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -615,7 +617,8 @@ async def back_to_main_menu(client, callback_query):
     first_name = callback_query.from_user.first_name
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id}) in My uploader bot**"
     keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="settings_command")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
