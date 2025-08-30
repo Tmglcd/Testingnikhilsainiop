@@ -2027,20 +2027,20 @@ def reset_and_set_commands():
     commands = [
         {"command": "start", "description": "✅ Check Alive the Bot"},
         {"command": "stop", "description": "🚫 Stop the ongoing process"},
-        {"command": "broadcast", "description": "📢 Broadcast to All Users"},
-        {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
         {"command": "drm", "description": "📑 Upload .txt file"},
+        {"command": "id", "description": "🆔 Get Your ID"},
+        {"command": "info", "description": "ℹ️ Check Your Information"},
         {"command": "cookies", "description": "📁 Upload YT Cookies"},
         {"command": "y2t", "description": "🔪 YouTube → .txt Converter"},
         {"command": "ytm", "description": "🎶 YouTube → .mp3 downloader"},
         {"command": "t2t", "description": "📟 Text → .txt Generator"},
-        {"command": "reset", "description": "✅ Reset the Bot"},
-        {"command": "id", "description": "🆔 Get Your ID"},
-        {"command": "info", "description": "ℹ️ Check Your Information"},
         {"command": "logs", "description": "👁️ View Bot Activity"},
+        {"command": "broadcast", "description": "📢 Broadcast to All Users"},
+        {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
         {"command": "addauth", "description": "▶️ Add Authorisation"},
         {"command": "rmauth", "description": "⏸️ Remove Authorisation "},
-        {"command": "users", "description": "👨‍👨‍👧‍👦 All Premium Users"}
+        {"command": "users", "description": "👨‍👨‍👧‍👦 All Premium Users"},
+        {"command": "reset", "description": "✅ Reset the Bot"}
     ]
     requests.post(url, json={"commands": commands})
     
