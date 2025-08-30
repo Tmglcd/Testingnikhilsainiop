@@ -458,17 +458,6 @@ async def getcookies_handler(client: Client, m: Message):
     except Exception as e:
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")
 
-@bot.on_message(filters.command("vidwatermark") & filters.private)
-async def vidwatermark_handler(client: Client, m: Message):
-    global vidwatermark
-    editable = await m.reply_text("**Send Video Watermark text, else Send /d**")
-    input8: Message = await bot.listen(editable.chat.id)
-    vidwatermark  = input8.text
-    if vidwatermark == '/d':
-        await editable.edit(f"**Video Watermark Disabled ✅**")
-    else:
-        await editable.edit(f"**Video Watermark Enabled ✅\nWatermark Text - {vidwatermark}**")
-    await input8.delete(True)
 
 @bot.on_message(filters.command("topic") & filters.private)
 async def topic_handler(client: Client, m: Message):
@@ -482,24 +471,7 @@ async def topic_handler(client: Client, m: Message):
         await editable.edit(f"**Topic Wise Uploading Off ✅**")
     await input.delete(True)
 
-@bot.on_message(filters.command("token") & filters.private)
-async def token_handler(client: Client, m: Message):
-    global cwtoken, cptoken, pwtoken
-    editable = await m.reply_text("<b>Enter 𝐏𝐖/𝐂𝐖/𝐂𝐏 Working Token For 𝐌𝐏𝐃 𝐔𝐑𝐋 or send /d</b>")
-    input: Message = await bot.listen(editable.chat.id)
-    token = input.text
-    if token == '/d':
-        cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
-        cptoken = "cptoken"
-        pwtoken = "pwtoken"
-        await editable.edit(f"**Default Token Used ✅**")
-    else:
-        cwtoken = token
-        cptoken = token
-        pwtoken = token
-        await editable.edit(f"**Updated Token Used ✅**")
-    await input.delete(True)
-        
+       
 @bot.on_message(filters.command(["reset"]))
 async def restart_handler(_, m):
     if m.chat.id != OWNER:
@@ -870,7 +842,7 @@ async def handle_caption(client, callback_query):
         await input_msg.delete()
 
 @bot.on_callback_query(filters.regex("video_thumbnail_command"))
-async def handle_videothumbnail(client, callback_query):
+async def video_thumbnail(client, callback_query):
     global thumb
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
@@ -896,8 +868,8 @@ async def handle_videothumbnail(client, callback_query):
         await input_msg.delete()
 
 @bot.on_callback_query(filters.regex("pdf_thumbnail_command"))
-async def y2t_button(client, callback_query):
-  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Features", callback_data="show_features")]])
+async def pdf_thumbnail_button(client, callback_query):
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
   caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
   await callback_query.message.edit_media(
     InputMediaPhoto(
@@ -959,6 +931,41 @@ async def handle_token(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Careerwill Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
+
+@bot.on_callback_query(filters.regex("video_thumbnail_command"))
+async def video_watermark(client, callback_query):
+    global vidwatermark
+    user_id = callback_query.from_user.id
+    keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+    editable = await callback_query.message.edit(f"**Send Video Watermark text or Send /d**", reply_markup=keyboard)
+    input_msg = await bot.listen(editable.chat.id)
+
+    try:
+        if input_msg.text.lower() == "/d":
+            vidwatermark = "/d"
+            await editable.edit(f"**Video Watermark Disabled ✅** !", reply_markup=keyboard)
+
+        else:
+            vidwatermark = input_msg.text
+            await editable.edit(f"Video Watermark {vidwatermark} enabled ✅!", reply_markup=keyboard)
+
+    except Exception as e:
+        await editable.edit(f"<b>❌ Failed to set Watermark:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
+    finally:
+        await input_msg.delete()
+
+
+@bot.on_callback_query(filters.regex("pdf_watermark_command"))
+async def pdf_watermark_button(client, callback_query):
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="settings")]])
+  caption = ("<b>⋅ This Feature is Not Working Yet ⋅</b>")
+  await callback_query.message.edit_media(
+    InputMediaPhoto(
+        media="https://envs.sh/GVI.jpg",
+        caption=caption
+    ),
+    reply_markup=keyboard
+  )
 
 
 @bot.on_callback_query(filters.regex("feat_command"))
