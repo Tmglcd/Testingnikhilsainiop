@@ -613,7 +613,6 @@ async def help_button(client, callback_query):
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n" 
         f"📌 𝗠𝗮𝗶𝗻 𝗙𝗲𝗮𝘁𝘂𝗿𝗲𝘀:\n\n"  
         f"➥ /start – Bot Status Check\n"
-        f"➥ /drm – Extract from .txt (Auto)\n"
         f"➥ /y2t – YouTube → .txt Converter\n"  
         f"➥ /ytm – YouTube → .mp3 downloader\n"  
         f"➥ /t2t – Text → .txt Generator\n" 
@@ -626,7 +625,8 @@ async def help_button(client, callback_query):
         f"➥ /logs – View Bot Activity\n"
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
         f"💡 𝗡𝗼𝘁𝗲:\n\n"  
-        f"• Send any link for auto-extraction\n"  
+        f"• Send any link for auto-extraction\n"
+        f"• Send direct .txt file for auto-extraction\n"
         f"• Supports batch processing\n\n"  
         f"╭────────⊰◆⊱────────╮\n"   
         f" ➠ 𝐌𝐚𝐝𝐞 𝐁𝐲 : {CREDIT} 💻\n"
@@ -1364,7 +1364,7 @@ async def universal_drm_handler(bot: Client, m: Message):
         await editable.delete()
 
     elif m.text:
-        if ".pdf" in links or ".jpeg" in links or ".jpg" in links or ".png" in links:
+        if any(ext in links[i][1] for ext in [".pdf", ".jpeg", ".jpg", ".png"] for i in range(len(links))):
             raw_text = '1'
             raw_text7 = '/d'
             channel_id = '/d'
@@ -1814,7 +1814,6 @@ def reset_and_set_commands():
     commands = [
         {"command": "start", "description": "✅ Check Alive the Bot"},
         {"command": "stop", "description": "🚫 Stop the ongoing process"},
-        {"command": "drm", "description": "📑 Upload .txt file"},
         {"command": "id", "description": "🆔 Get Your ID"},
         {"command": "info", "description": "ℹ️ Check Your Information"},
         {"command": "cookies", "description": "📁 Upload YT Cookies"},
