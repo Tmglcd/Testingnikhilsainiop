@@ -1276,8 +1276,9 @@ async def universal_drm_handler(bot: Client, m: Message):
         lines = [m.text]
     else:
         return
-    
-    if m.chat.id not in AUTH_USERS:
+
+    if m.document:
+        if m.chat.id not in AUTH_USERS:
             print(f"User ID not in AUTH_USERS", m.chat.id)
             await bot.send_message(m.chat.id, f"<blockquote>__**Oopss! You are not a Premium member\nPLEASE /upgrade YOUR PLAN\nSend me your user id for authorization\nYour User id**__ - `{m.chat.id}`</blockquote>\n")
             return
@@ -1402,8 +1403,8 @@ async def universal_drm_handler(bot: Client, m: Message):
         thumb = thumb
 
     try:
-        if raw_text == "1":
-            batch_message = await bot.send_message(chat_id=channel_id, text=f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
+        if m.document and raw_text == "1":
+                batch_message = await bot.send_message(chat_id=channel_id, text=f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
             if "/d" not in raw_text7:
                 await bot.send_message(chat_id=m.chat.id, text=f"<blockquote><b><i>🎯Target Batch : {b_name}</i></b></blockquote>\n\n🔄 Your Task is under processing, please check your Set Channel📱. Once your task is complete, I will inform you 📩")
                 await bot.pin_chat_message(channel_id, batch_message.id)
@@ -1439,7 +1440,15 @@ async def universal_drm_handler(bot: Client, m: Message):
             else:
                 name = f'{str(count).zfill(3)}) {name1[:60]} {filename}'
                 namef = f'{name1[:60]} {filename}'
-            
+            if m.text:
+                if "youtu" in url:
+                    oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+                    response = requests.get(oembed_url)
+                    audio_title = response.json().get('title', 'YouTube Video')
+                    audio_title = audio_title.replace("_", " ")
+                    name = f'{audio_title[:60]}'        
+                    name1 = f'{audio_title}'
+                
             if "visionias" in url:
                 async with ClientSession() as session:
                     async with session.get(url, headers={'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9', 'Accept-Language': 'en-US,en;q=0.9', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Pragma': 'no-cache', 'Referer': 'http://www.visionias.in/', 'Sec-Fetch-Dest': 'iframe', 'Sec-Fetch-Mode': 'navigate', 'Sec-Fetch-Site': 'cross-site', 'Upgrade-Insecure-Requests': '1', 'User-Agent': 'Mozilla/5.0 (Linux; Android 12; RMX2121) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36', 'sec-ch-ua': '"Chromium";v="107", "Not=A?Brand";v="24"', 'sec-ch-ua-mobile': '?1', 'sec-ch-ua-platform': '"Android"',}) as resp:
@@ -1507,62 +1516,70 @@ async def universal_drm_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
 
             try:
-                if topic == "/yes":
-                    raw_title = links[i][0]
-                    t_match = re.search(r"[\(\[]([^\)\]]+)[\)\]]", raw_title)
-                    if t_match:
-                        t_name = t_match.group(1).strip()
-                        v_name = re.sub(r"^[\(\[][^\)\]]+[\)\]]\s*", "", raw_title)
-                        v_name = re.sub(r"[\(\[][^\)\]]+[\)\]]", "", v_name)
-                        v_name = re.sub(r":.*", "", v_name).strip()
-                    else:
-                        t_name = "Untitled"
-                        v_name = re.sub(r":.*", "", raw_title).strip()
-                    
-                    if caption == "/cc1":
-                        cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} [{res}p] .mkv`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{v_name} .pdf`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{v_name} .zip`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        ccimg = f'[🖼️]Img Id : {str(count).zfill(3)}\n**Img Title :** `{v_name} .jpg`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{v_name} .html`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        ccyt = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} .mp4`\n<a href="{url}">__**Click Here to Watch Stream**__</a>\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                        ccm = f'[🎵]Mp3 Id : {str(count).zfill(3)}\n**Audio Title :** `{v_name} .mp3`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
-                    elif caption == "/cc2":
-                        cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🎞️ Title :</b> {v_name}\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>📁 Title :</b> {v_name}\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>📒 Title :</b> {v_name}\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🖼️ Title :</b> {v_name}\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🎵 Title :</b> {v_name}\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🌐 Title :</b> {v_name}\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                    else:
-                        cc = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} [{res}p] .mkv'
-                        cc1 = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .pdf'
-                        cczip = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .zip'
-                        ccimg = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .jpg'
-                        ccm = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .mp3'
-                        cchtml = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .html'
+                if m.text:
+                    cc = f'{name1} [{res}p] .mkv'
+                    cc1 = f'{name1} .pdf'
+                    cczip = f'{name1} .zip'
+                    ccimg = f'{name1} .jpg'
+                    ccm = f'{name1} .mp3'
+                    cchtml = f'{name1} .html'
                 else:
-                    if caption == "/cc1":
-                        cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{name1} [{res}p] .mkv`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{name1} .pdf`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{name1} .zip`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n' 
-                        ccimg = f'[🖼️]Img Id : {str(count).zfill(3)}\n**Img Title :** `{name1} .jpg`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                        ccm = f'[🎵]Audio Id : {str(count).zfill(3)}\n**Audio Title :** `{name1} .mp3`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                        cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{name1} .html`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
-                    elif caption == "/cc2":
-                        cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎞️ Title :</b> {name1}\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📁 Title :</b> {name1}\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📒 Title :</b> {name1}\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🖼️ Title :</b> {name1}\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎵 Title :</b> {name1}\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
-                        cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🌐 Title :</b> {name1}\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                    if topic == "/yes":
+                        raw_title = links[i][0]
+                        t_match = re.search(r"[\(\[]([^\)\]]+)[\)\]]", raw_title)
+                        if t_match:
+                            t_name = t_match.group(1).strip()
+                            v_name = re.sub(r"^[\(\[][^\)\]]+[\)\]]\s*", "", raw_title)
+                            v_name = re.sub(r"[\(\[][^\)\]]+[\)\]]", "", v_name)
+                            v_name = re.sub(r":.*", "", v_name).strip()
+                        else:
+                            t_name = "Untitled"
+                            v_name = re.sub(r":.*", "", raw_title).strip()
+                    
+                        if caption == "/cc1":
+                            cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} [{res}p] .mkv`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{v_name} .pdf`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{v_name} .zip`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            ccimg = f'[🖼️]Img Id : {str(count).zfill(3)}\n**Img Title :** `{v_name} .jpg`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{v_name} .html`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            ccyt = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{v_name} .mp4`\n<a href="{url}">__**Click Here to Watch Stream**__</a>\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                            ccm = f'[🎵]Mp3 Id : {str(count).zfill(3)}\n**Audio Title :** `{v_name} .mp3`\n<blockquote><b>Batch Name : {b_name}\nTopic Name : {t_name}</b></blockquote>\n\n**Extracted by➤**{CR}\n'
+                        elif caption == "/cc2":
+                            cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🎞️ Title :</b> {v_name}\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>📁 Title :</b> {v_name}\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>📒 Title :</b> {v_name}\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🖼️ Title :</b> {v_name}\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🎵 Title :</b> {v_name}\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<blockquote>⋅ ─  {t_name}  ─ ⋅</blockquote>\n\n<b>🌐 Title :</b> {v_name}\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        else:
+                            cc = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} [{res}p] .mkv'
+                            cc1 = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .pdf'
+                            cczip = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .zip'
+                            ccimg = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .jpg'
+                            ccm = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .mp3'
+                            cchtml = f'<blockquote>⋅ ─ {t_name} ─ ⋅</blockquote>\n<b>{str(count).zfill(3)}.</b> {name1} .html'
                     else:
-                        cc = f'<b>{str(count).zfill(3)}.</b> {name1} [{res}p] .mkv'
-                        cc1 = f'<b>{str(count).zfill(3)}.</b> {name1} .pdf'
-                        cczip = f'<b>{str(count).zfill(3)}.</b> {name1} .zip'
-                        ccimg = f'<b>{str(count).zfill(3)}.</b> {name1} .jpg'
-                        ccm = f'<b>{str(count).zfill(3)}.</b> {name1} .mp3'
-                        cchtml = f'<b>{str(count).zfill(3)}.</b> {name1} .html'
+                        if caption == "/cc1":
+                            cc = f'[🎥]Vid Id : {str(count).zfill(3)}\n**Video Title :** `{name1} [{res}p] .mkv`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cc1 = f'[📕]Pdf Id : {str(count).zfill(3)}\n**File Title :** `{name1} .pdf`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cczip = f'[📁]Zip Id : {str(count).zfill(3)}\n**Zip Title :** `{name1} .zip`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n' 
+                            ccimg = f'[🖼️]Img Id : {str(count).zfill(3)}\n**Img Title :** `{name1} .jpg`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
+                            ccm = f'[🎵]Audio Id : {str(count).zfill(3)}\n**Audio Title :** `{name1} .mp3`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
+                            cchtml = f'[🌐]Html Id : {str(count).zfill(3)}\n**Html Title :** `{name1} .html`\n<blockquote><b>Batch Name :</b> {b_name}</blockquote>\n\n**Extracted by➤**{CR}\n'
+                        elif caption == "/cc2":
+                            cc = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎞️ Title :</b> {name1}\n<b>├── Extention :  {CR} .mkv</b>\n<b>├── Resolution : [{res}]</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cc1 = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📁 Title :</b> {name1}\n<b>├── Extention :  {CR} .pdf</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cczip = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>📒 Title :</b> {name1}\n<b>├── Extention :  {CR} .zip</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            ccimg = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🖼️ Title :</b> {name1}\n<b>├── Extention :  {CR} .jpg</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            ccm = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🎵 Title :</b> {name1}\n<b>├── Extention :  {CR} .mp3</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                            cchtml = f"——— ✦ {str(count).zfill(3)} ✦ ———\n\n<b>🌐 Title :</b> {name1}\n<b>├── Extention :  {CR} .html</b>\n<blockquote><b>📚 Course : {b_name}</b></blockquote>\n\n**🌟 Extracted By : {CR}**"
+                        else:
+                            cc = f'<b>{str(count).zfill(3)}.</b> {name1} [{res}p] .mkv'
+                            cc1 = f'<b>{str(count).zfill(3)}.</b> {name1} .pdf'
+                            cczip = f'<b>{str(count).zfill(3)}.</b> {name1} .zip'
+                            ccimg = f'<b>{str(count).zfill(3)}.</b> {name1} .jpg'
+                            ccm = f'<b>{str(count).zfill(3)}.</b> {name1} .mp3'
+                            cchtml = f'<b>{str(count).zfill(3)}.</b> {name1} .html'
                     
                 if "drive" in url:
                     try:
@@ -1764,11 +1781,12 @@ async def universal_drm_handler(bot: Client, m: Message):
 
     success_count = len(links) - failed_count
     video_count = v2_count + mpd_count + m3u8_count + yt_count + drm_count + zip_count + other_count
-    if raw_text7 == "/d":
-        await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
-    else:
-        await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
-        await bot.send_message(m.chat.id, f"<blockquote><b>✅ Your Task is completed, please check your Set Channel📱</b></blockquote>")
+    if m.document:
+        if raw_text7 == "/d":
+            await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
+        else:
+            await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
+            await bot.send_message(m.chat.id, f"<blockquote><b>✅ Your Task is completed, please check your Set Channel📱</b></blockquote>")
 
 
 
