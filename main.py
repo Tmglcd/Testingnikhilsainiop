@@ -1291,6 +1291,37 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
+
+#...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
+@bot.on_message(filters.command(["t2h"]))
+async def txt_handler(bot: Client, message: Message):
+    editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
+    input: Message = await bot.listen(editable.chat.id)
+    if input.document and input.document.file_name.endswith('.txt'):
+        file_path = await input.download()
+        file_name, ext = os.path.splitext(os.path.basename(file_path))        
+    else:
+        await message.reply_text("**• Invalid file input.**")
+        return
+           
+    with open(file_path, "r") as f:
+        file_content = f.read()
+
+    urls = txthtml.extract_names_and_urls(file_content)
+
+    videos, pdfs, others = txthtml.categorize_urls(urls)
+
+    html_content = txthtml.generate_html(file_name, videos, pdfs, others)
+    html_file_path = file_path.replace(".txt", ".html")
+    with open(html_file_path, "w") as f:
+        f.write(html_content)
+
+    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
+    await bot.send_document(OWNER, document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
+    os.remove(file_path)
+    os.remove(html_file_path)
+    
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.private & (filters.document | filters.text))
@@ -1834,36 +1865,6 @@ async def universal_drm_handler(bot: Client, m: Message):
             await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
             await bot.send_message(m.chat.id, f"<blockquote><b>✅ Your Task is completed, please check your Set Channel📱</b></blockquote>")
 
-#...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
-@bot.on_message(filters.command(["t2h"]))
-async def txt_handler(bot: Client, message: Message):
-    editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
-    input: Message = await bot.listen(editable.chat.id)
-    if input.document and input.document.file_name.endswith('.txt'):
-        file_path = await input.download()
-        file_name, ext = os.path.splitext(os.path.basename(file_path))        
-    else:
-        await message.reply_text("**• Invalid file input.**")
-        return
-           
-    with open(file_path, "r") as f:
-        file_content = f.read()
-
-    urls = txthtml.extract_names_and_urls(file_content)
-
-    videos, pdfs, others = txthtml.categorize_urls(urls)
-
-    html_content = txthtml.generate_html(file_name, videos, pdfs, others)
-    html_file_path = file_path.replace(".txt", ".html")
-    with open(html_file_path, "w") as f:
-        f.write(html_content)
-
-    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
-
-
-    os.remove(file_path)
-    os.remove(html_file_path)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
