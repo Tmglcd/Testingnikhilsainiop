@@ -308,24 +308,20 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
         else:
             w_filename = f"w_{filename}"
             font_path = "vidwater.ttf"
-            subprocess.run(
-                f'ffmpeg -i "{filename}" -vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\':fontcolor=white@0.3:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2" -codec:a copy "{w_filename}"',
-                shell=True
-            )
             
             if watermark_seconds > 0:
                 enable_expr = f":enable='lte(t,{watermark_seconds})'"
             else:
                 enable_expr = ""
-    
+
             ffmpeg_cmd = (
                 f'ffmpeg -i "{filename}" '
                 f'-vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\''
                 f':fontcolor=white@0.4:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2'
+                f':bordercolor=black:borderw=2'
                 f'{enable_expr}\" -codec:a copy \"{w_filename}\"'
             )
             subprocess.run(ffmpeg_cmd, shell=True)
-
     
     except Exception as e:
         await m.reply_text(str(e))
