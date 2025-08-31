@@ -302,7 +302,12 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
             thumbnail = f"{filename}.jpg"
         else:
             thumbnail = thumb  
-        
+            
+        try:
+            watermark_seconds = int(watermark_seconds)
+        except (TypeError, ValueError):
+            vidwatermark = "/d"
+
         if vidwatermark == "/d":
             w_filename = f"{filename}"
         else:
