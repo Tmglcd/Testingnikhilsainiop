@@ -1367,6 +1367,7 @@ async def universal_drm_handler(bot: Client, m: Message):
         if ".pdf" in links or ".jpeg" in links or ".jpg" in links or ".png" in links:
             raw_text = '1'
             raw_text7 = '/d'
+            channel_id = '/d'
             b_name = 'Link Input'
         else:
             editable = await m.reply_text(f"╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[🦋`{CREDIT}`🦋]⚡⌋━━➣ ")
@@ -1393,6 +1394,7 @@ async def universal_drm_handler(bot: Client, m: Message):
                     res = "UN"
             raw_text = '1'
             raw_text7 = '/d'
+            channel_id = '/d'
             b_name = 'Link Input'
             await editable.delete()
         
