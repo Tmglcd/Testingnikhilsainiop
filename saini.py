@@ -327,9 +327,12 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
             with open("inputs.txt", "w") as f:
                 f.write("file 'wm_part.mp4'\n")
                 f.write("file 'plain_part.mp4'\n")
-            cmd_concat = 'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "w_{filename}.mp4"'
+            base_filename = filename
+            if filename.endswith('.mp4'):
+                base_filename = filename[:-4]
+            w_filename = f"w_{base_filename}.mp4"
+            cmd_concat = 'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "w_{filename}"'
             subprocess.run(cmd_concat, shell=True)
-            w_filename = f"w_{filename}.mp4"
 
             os.remove("wm_part.mp4")
             os.remove("plain_part.mp4")
