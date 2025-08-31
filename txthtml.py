@@ -256,7 +256,7 @@ def generate_html(file_name, videos, pdfs, others):
 <body>
     <div class="header">
         {file_name_without_extension}
-        <div class="subheading">📥 <b>Extracted By </b>: 𝙎𝘼𝙄𝙉𝙄 𝘽𝙊𝙏𝙎</div>
+        <div class="subheading">📥 <b>Extracted By : {CREDIT}</b></div>
     </div>
 
     <div id="video-player">
@@ -308,7 +308,7 @@ def generate_html(file_name, videos, pdfs, others):
         </div>
     </div>
 
-    <div class="footer"><b>Extracted By </b>: 𝙎𝘼𝙄𝙉𝙄 𝘽𝙊𝙏𝙎</div>
+    <div class="footer"><b>Extracted By : {CREDIT}</b></div>
 
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <script>
