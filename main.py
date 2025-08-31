@@ -1436,12 +1436,6 @@ async def universal_drm_handler(bot: Client, m: Message):
             link0 = "https://" + Vxy
 
             name1 = links[i][0].replace("(", "[").replace(")", "]").replace("_", "").replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
-            if filename == "/d":
-                name = f'{str(count).zfill(3)}) {name1[:60]}'
-                namef = f'{name1[:60]}'
-            else:
-                name = f'{str(count).zfill(3)}) {name1[:60]} {filename}'
-                namef = f'{name1[:60]} {filename}'
             if m.text:
                 if "youtu" in url:
                     oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
@@ -1450,6 +1444,16 @@ async def universal_drm_handler(bot: Client, m: Message):
                     audio_title = audio_title.replace("_", " ")
                     name = f'{audio_title[:60]}'        
                     name1 = f'{audio_title}'
+                else:
+                    name = f'{name1[:60]}'
+                    namef = f'{name1[:60]}'
+            else:
+                if filename == "/d":
+                    name = f'{str(count).zfill(3)}) {name1[:60]}'
+                    namef = f'{name1[:60]}'
+                else:
+                    name = f'{str(count).zfill(3)}) {name1[:60]} {filename}'
+                    namef = f'{name1[:60]} {filename}'
                 
             if "visionias" in url:
                 async with ClientSession() as session:
