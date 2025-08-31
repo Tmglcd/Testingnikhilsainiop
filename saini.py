@@ -311,23 +311,30 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
         if vidwatermark == "/d":
             w_filename = f"{filename}"
         else:
-            w_filename = f"w_{filename}"
             font_path = "vidwater.ttf"
-            
-            if watermark_seconds > 0:
-                enable_expr = f":enable='lte(t,{watermark_seconds})'"
-            else:
-                enable_expr = ""
-
-            ffmpeg_cmd = (
-                f'ffmpeg -i "{filename}" '
-                f'-vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\''
-                f':fontcolor=white@0.4:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2'
-                f':bordercolor=black:borderw=2'
-                f'{enable_expr}\" -codec:a copy \"{w_filename}\"'
+            cmd_watermark = (
+                f'ffmpeg -y -i "{filename}" -t {watermark_seconds} '
+                f'-vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\':fontcolor=white@0.4:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2:bordercolor=black:borderw=2" '
+                f'-c:a copy "wm_part.mp4"'
             )
-            subprocess.run(ffmpeg_cmd, shell=True)
-    
+            subprocess.run(cmd_watermark, shell=True)
+
+            cmd_nowm = (
+                f'ffmpeg -y -i "{filename}" -ss {watermark_seconds} -c copy "plain_part.mp4"'
+            )
+            subprocess.run(cmd_nowm, shell=True)
+
+            with open("inputs.txt", "w") as f:
+                f.write("file 'wm_part.mp4'\n")
+                f.write("file 'plain_part.mp4'\n")
+            cmd_concat = 'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "w_{filename}"'
+            subprocess.run(cmd_concat, shell=True)
+            w_filename = f"w_{filename}"
+
+            os.remove("wm_part.mp4")
+            os.remove("plain_part.mp4")
+            os.remove("inputs.txt")
+
     except Exception as e:
         await m.reply_text(str(e))
 
