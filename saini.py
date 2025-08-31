@@ -292,7 +292,7 @@ async def download_and_decrypt_video(url, cmd, name, key):
             print(f"Failed to decrypt {video_path}.")  
             return None  
 
-async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermark_seconds, thumb, name, prog, channel_id):
+async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, thumb, name, prog, channel_id):
     subprocess.run(f'ffmpeg -i "{filename}" -ss 00:00:10 -vframes 1 "{filename}.jpg"', shell=True)
     await prog.delete (True)
     reply1 = await bot.send_message(channel_id, f"**📩 Uploading Video 📩:-**\n<blockquote>**{name}**</blockquote>")
@@ -302,42 +302,17 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
             thumbnail = f"{filename}.jpg"
         else:
             thumbnail = thumb  
-            
-        try:
-            watermark_seconds = int(watermark_seconds)
-        except (TypeError, ValueError):
-            vidwatermark = "/d"
-
+        
         if vidwatermark == "/d":
             w_filename = f"{filename}"
         else:
+            w_filename = f"w_{filename}"
             font_path = "vidwater.ttf"
-            cmd_watermark = (
-                f'ffmpeg -y -i "{filename}" -t {watermark_seconds} '
-                f'-vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\':fontcolor=white@0.4:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2:bordercolor=black:borderw=2" '
-                f'-c:a copy "wm_part.mp4"'
+            subprocess.run(
+                f'ffmpeg -i "{filename}" -vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\':fontcolor=white@0.3:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2" -codec:a copy "{w_filename}"',
+                shell=True
             )
-            subprocess.run(cmd_watermark, shell=True)
-
-            cmd_nowm = (
-                f'ffmpeg -y -i "{filename}" -ss {watermark_seconds} -c copy "plain_part.mp4"'
-            )
-            subprocess.run(cmd_nowm, shell=True)
-
-            with open("inputs.txt", "w") as f:
-                f.write("file 'wm_part.mp4'\n")
-                f.write("file 'plain_part.mp4'\n")
-            base_filename = filename
-            if filename.endswith('.mp4'):
-                base_filename = filename[:-4]
-            w_filename = f"w_{base_filename}.mp4"
-            cmd_concat = f'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "{w_filename}"'
-            subprocess.run(cmd_concat, shell=True)
-
-            os.remove("wm_part.mp4")
-            os.remove("plain_part.mp4")
-            os.remove("inputs.txt")
-
+            
     except Exception as e:
         await m.reply_text(str(e))
 
