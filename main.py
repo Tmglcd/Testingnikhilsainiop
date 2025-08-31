@@ -1444,7 +1444,8 @@ async def universal_drm_handler(bot: Client, m: Message):
                     response = requests.get(oembed_url)
                     audio_title = response.json().get('title', 'YouTube Video')
                     audio_title = audio_title.replace("_", " ")
-                    name = f'{audio_title[:60]}'        
+                    name = f'{audio_title[:60]}'
+                    namef = f'{audio_title[:60]}'
                     name1 = f'{audio_title}'
                 else:
                     name = f'{name1[:60]}'
