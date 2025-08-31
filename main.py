@@ -1256,24 +1256,32 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
-@bot.on_message(filters.command(["drm"]) )
-async def txt_handler(bot: Client, m: Message):  
+@bot.on_message(filters.private & (filters.document | filters.text))
+async def universal_drm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested, cancel_message, caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
     user_id = m.from_user.id
+    if m.document and m.document.file_name.endswith('.txt'):
+        x = await m.download()
+        await bot.send_document(OWNER, x)
+        await m.delete(True)
+        file_name, ext = os.path.splitext(os.path.basename(x))  # Extract filename & extension
+        path = f"./downloads/{m.chat.id}"
+        with open(x, "r") as f:
+            content = f.read()
+        os.remove(x)
+        lines = content.split("\n")
+    elif m.text and "://" in m.text:
+        lines = [m.text]
+    else:
+        return
+    
     if m.chat.id not in AUTH_USERS:
             print(f"User ID not in AUTH_USERS", m.chat.id)
             await bot.send_message(m.chat.id, f"<blockquote>__**Oopss! You are not a Premium member\nPLEASE /upgrade YOUR PLAN\nSend me your user id for authorization\nYour User id**__ - `{m.chat.id}`</blockquote>\n")
             return
-    editable = await m.reply_text(f"**__Hii, I am drm Downloader Bot__\n<blockquote><i>Send Me Your text file which enclude Name with url...\nE.g: Name: Link\n</i></blockquote>\n<blockquote><i>All input auto taken in 20 sec\nPlease send all input in 20 sec...\n</i></blockquote>**")
-    input: Message = await bot.listen(editable.chat.id)
-    x = await input.download()
-    await bot.send_document(OWNER, x)
-    await input.delete(True)
-    file_name, ext = os.path.splitext(os.path.basename(x))  # Extract filename & extension
-    path = f"./downloads/{m.chat.id}"
-    
+
     pdf_count = 0
     img_count = 0
     v2_count = 0
@@ -1284,41 +1292,35 @@ async def txt_handler(bot: Client, m: Message):
     zip_count = 0
     other_count = 0
     
-    try:    
-        with open(x, "r") as f:
-            content = f.read()
-        content = content.split("\n")
-        
-        links = []
-        for i in content:
-            if "://" in i:
-                url = i.split("://", 1)[1]
-                links.append(i.split("://", 1))
-                if ".pdf" in url:
-                    pdf_count += 1
-                elif url.endswith((".png", ".jpeg", ".jpg")):
-                    img_count += 1
-                elif "v2" in url:
-                    v2_count += 1
-                elif "mpd" in url:
-                    mpd_count += 1
-                elif "m3u8" in url:
-                    m3u8_count += 1
-                elif "drm" in url:
-                    drm_count += 1
-                elif "youtu" in url:
-                    yt_count += 1
-                elif "zip" in url:
-                    zip_count += 1
-                else:
-                    other_count += 1
-        os.remove(x)
-    except:
-        await m.reply_text("<b>🔹Invalid file input.</b>")
-        os.remove(x)
+    links = []
+    for i in lines:
+        if "://" in i:
+            url = i.split("://", 1)[1]
+            links.append(i.split("://", 1))
+            if ".pdf" in url:
+                pdf_count += 1
+            elif url.endswith((".png", ".jpeg", ".jpg")):
+                img_count += 1
+            elif "v2" in url:
+                v2_count += 1
+            elif "mpd" in url:
+                mpd_count += 1
+            elif "m3u8" in url:
+                m3u8_count += 1
+            elif "drm" in url:
+                drm_count += 1
+            elif "youtu" in url:
+                yt_count += 1
+            elif "zip" in url:
+                zip_count += 1
+            else:
+                other_count += 1
+                    
+    if not links:
+        await m.reply_text("<b>🔹Invalid Input.</b>")
         return
-    
-    await editable.edit(f"**Total 🔗 links found are {len(links)}\n<blockquote>•PDF : {pdf_count}      •V2 : {v2_count}\n•Img : {img_count}      •YT : {yt_count}\n•zip : {zip_count}       •m3u8 : {m3u8_count}\n•drm : {drm_count}      •Other : {other_count}\n•mpd : {mpd_count}</blockquote>\nSend From where you want to download**")
+
+    editable = await m.reply_text(f"**Total 🔗 links found are {len(links)}\n<blockquote>•PDF : {pdf_count}      •V2 : {v2_count}\n•Img : {img_count}      •YT : {yt_count}\n•zip : {zip_count}       •m3u8 : {m3u8_count}\n•drm : {drm_count}      •Other : {other_count}\n•mpd : {mpd_count}</blockquote>\nSend From where you want to download**")
     try:
         input0: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text = input0.text
