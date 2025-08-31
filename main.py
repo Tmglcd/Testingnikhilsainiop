@@ -58,6 +58,7 @@ cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6
 cptoken = "cptoken"
 pwtoken = "pwtoken"
 vidwatermark = '/d'
+watermark_seconds = '60'
 raw_text2 = '480'
 quality = '480p'
 res = '854x480'
@@ -948,7 +949,7 @@ async def handle_token(client, callback_query):
 
 @bot.on_callback_query(filters.regex("video_watermark_command"))
 async def video_watermark(client, callback_query):
-    global vidwatermark
+    global vidwatermark, watermark_seconds
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="wattermark_command")]])
     editable = await callback_query.message.edit(f"**Send Video Watermark text or Send /d**", reply_markup=keyboard)
@@ -961,8 +962,14 @@ async def video_watermark(client, callback_query):
 
         else:
             vidwatermark = input_msg.text
-            await editable.edit(f"Video Watermark {vidwatermark} enabled ✅!", reply_markup=keyboard)
-
+            await editable.edit(f"<b>Send Video Duration integer Value in seconds in which you want to set Watermark!</b>\n<blockquote><b>Note - If you want to set watermark in complete video then send `0`</b></blockquote>", reply_markup=keyboard)
+            input1 = await bot.listen(editable.chat.id)
+            watermark_seconds = input1.text
+            await input1.delete(True)
+            if watermark_seconds == '0':
+                await editable.edit(f"**Video Watermark {vidwatermark} for Complete Video ✅** !", reply_markup=keyboard)
+            else:
+                await editable.edit(f"**Video Watermark {vidwatermark} for {watermark_seconds} Seconds ✅** !", reply_markup=keyboard)
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Watermark:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
@@ -1054,7 +1061,7 @@ async def video_watermark(client, callback_query):
 
 @bot.on_callback_query(filters.regex("resset_command"))
 async def credit(client, callback_query):
-    global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
+    global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, watermark_seconds, raw_text2, quality, res, topic
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"If you want to reset settings send /yes or Send /no", reply_markup=keyboard)
@@ -1070,6 +1077,7 @@ async def credit(client, callback_query):
             cptoken = "cptoken"
             pwtoken = "pwtoken"
             vidwatermark = '/d'
+            watermark_seconds = '60'
             raw_text2 = '480'
             quality = '480p'
             res = '854x480'
@@ -1258,7 +1266,7 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
 
 @bot.on_message(filters.private & (filters.document | filters.text))
 async def universal_drm_handler(bot: Client, m: Message):
-    global processing_request, cancel_requested, cancel_message, caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
+    global processing_request, cancel_requested, cancel_message, caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, watermark_seconds, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
     user_id = m.from_user.id
@@ -1714,7 +1722,7 @@ async def universal_drm_handler(bot: Client, m: Message):
                     filename = res_file  
                     await prog1.delete(True)
                     await prog.delete(True)
-                    await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
+                    await helper.send_vid(bot, m, cc, filename, vidwatermark, watermark_seconds, thumb, name, prog, channel_id)
                     count += 1  
                     await asyncio.sleep(1)  
                     continue  
@@ -1744,7 +1752,7 @@ async def universal_drm_handler(bot: Client, m: Message):
                     filename = res_file
                     await prog1.delete(True)
                     await prog.delete(True)
-                    await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
+                    await helper.send_vid(bot, m, cc, filename, vidwatermark, watermark_seconds, thumb, name, prog, channel_id)
                     count += 1
                     await asyncio.sleep(1)
                     continue
@@ -1774,7 +1782,7 @@ async def universal_drm_handler(bot: Client, m: Message):
                     filename = res_file
                     await prog1.delete(True)
                     await prog.delete(True)
-                    await helper.send_vid(bot, m, cc, filename, vidwatermark, thumb, name, prog, channel_id)
+                    await helper.send_vid(bot, m, cc, filename, vidwatermark, watermark_seconds, thumb, name, prog, channel_id)
                     count += 1
                     time.sleep(1)
                 
