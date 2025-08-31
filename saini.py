@@ -331,7 +331,7 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermar
             if filename.endswith('.mp4'):
                 base_filename = filename[:-4]
             w_filename = f"w_{base_filename}.mp4"
-            cmd_concat = 'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "w_{filename}"'
+            cmd_concat = 'ffmpeg -y -f concat -safe 0 -i inputs.txt -c copy "{w_filename}"'
             subprocess.run(cmd_concat, shell=True)
 
             os.remove("wm_part.mp4")
