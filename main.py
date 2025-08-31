@@ -1357,7 +1357,7 @@ async def universal_drm_handler(bot: Client, m: Message):
         except asyncio.TimeoutError:
             raw_text7 = '/d'
 
-         if "/d" in raw_text7:
+        if "/d" in raw_text7:
             channel_id = m.chat.id
         else:
             channel_id = raw_text7    
