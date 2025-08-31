@@ -1,6 +1,7 @@
 import os
 import requests
 import subprocess
+from vars import CREDIT
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
