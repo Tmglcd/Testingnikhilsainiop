@@ -19,6 +19,7 @@ from base64 import b64encode, b64decode
 from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
+import txthtml
 from utils import progress_bar
 from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS
 from aiohttp import ClientSession
@@ -47,6 +48,8 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 processing_request = False
 cancel_requested = False
 cancel_message = None
@@ -63,6 +66,8 @@ quality = '480p'
 res = '854x480'
 topic = '/d'
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 cookies_file_path = os.getenv("cookies_file_path", "youtube_cookies.txt")
 api_url = "http://master-api-v3.vercel.app/"
 api_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzkxOTMzNDE5NSIsInRnX3VzZXJuYW1lIjoi4p61IFtvZmZsaW5lXSIsImlhdCI6MTczODY5MjA3N30.SXzZ1MZcvMp5sGESj0hBKSghhxJ3k1GTWoBUbivUe1I"
@@ -73,7 +78,8 @@ photoyt = 'https://tinypic.host/images/2025/03/18/YouTube-Logo.wine.png' #https:
 photocp = 'https://tinypic.host/images/2025/03/28/IMG_20250328_133126.jpg'
 photozip = 'https://envs.sh/cD_.jpg'
 
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # Inline keyboard for start command
 BUTTONSCONTACT = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact", url="https://t.me/saini_contact_bot")]])
 keyboard = InlineKeyboardMarkup(
@@ -89,6 +95,8 @@ image_urls = [
     # Add more image URLs as needed
 ]
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("addauth") & filters.private)
 async def add_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -103,7 +111,7 @@ async def add_auth_user(client: Client, message: Message):
             await bot.send_message(chat_id=new_user_id, text=f"<b>Great! You are added in Premium Membership!</b>")
     except (IndexError, ValueError):
         await message.reply_text("**Please provide a valid user ID.**")
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("users") & filters.private)
 async def list_auth_users(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -111,7 +119,7 @@ async def list_auth_users(client: Client, message: Message):
     
     user_list = '\n'.join(map(str, AUTH_USERS))  # AUTH_USERS ki list dikhayenge
     await message.reply_text(f"**Authorized Users:**\n{user_list}")
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("rmauth") & filters.private)
 async def remove_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -128,7 +136,8 @@ async def remove_auth_user(client: Client, message: Message):
     except (IndexError, ValueError):
         await message.reply_text("**Please provide a valid user ID.**")
 
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("broadcast") & filters.private)
 async def broadcast_handler(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -176,7 +185,7 @@ async def broadcast_handler(client: Client, message: Message):
             continue
 
     await message.reply_text(f"<b>Broadcast complete!</b>\n<blockquote><b>✅ Success: {success}\n❎ Failed: {fail}</b></blockquote>")
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("broadusers") & filters.private)
 async def broadusers_handler(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -203,7 +212,8 @@ async def broadusers_handler(client: Client, message: Message):
     )
     await message.reply_text(text)
     
-        
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("cookies") & filters.private)
 async def cookies_handler(client: Client, m: Message):
     editable = await m.reply_text(
@@ -240,6 +250,8 @@ async def cookies_handler(client: Client, m: Message):
     except Exception as e:
         await m.reply_text(f"__**Failed Reason**__\n<blockquote>{str(e)}</blockquote>")
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["t2t"]))
 async def text_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
@@ -276,6 +288,8 @@ async def text_to_txt(client, message: Message):
 UPLOAD_FOLDER = '/path/to/upload/folder'
 EDITED_FILE_PATH = '/path/to/save/edited_output.txt'
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["y2t"]))
 async def youtube_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
@@ -339,6 +353,8 @@ async def youtube_to_txt(client, message: Message):
     # Remove the temporary text file after sending
     os.remove(txt_file)
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["ytm"]))
 async def txt_handler(bot: Client, m: Message):
     global processing_request, cancel_requested, cancel_message
@@ -439,8 +455,8 @@ async def txt_handler(bot: Client, m: Message):
     finally:
         await m.reply_text("<blockquote><b>All YouTube Music Download Successfully</b></blockquote>")
 
-
-m_file_path= "main.py"
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("getcookies") & filters.private)
 async def getcookies_handler(client: Client, m: Message):
     try:
@@ -452,6 +468,9 @@ async def getcookies_handler(client: Client, m: Message):
         )
     except Exception as e:
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")     
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+m_file_path= "main.py"
 @bot.on_message(filters.command("mfile") & filters.private)
 async def getcookies_handler(client: Client, m: Message):
     try:
@@ -463,7 +482,8 @@ async def getcookies_handler(client: Client, m: Message):
     except Exception as e:
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")
 
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["reset"]))
 async def restart_handler(_, m):
     if m.chat.id != OWNER:
@@ -472,6 +492,8 @@ async def restart_handler(_, m):
         await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("stop") & filters.private)
 async def cancel_handler(client: Client, m: Message):
     global processing_request, cancel_requested
@@ -493,6 +515,8 @@ async def cancel_handler(client: Client, m: Message):
             cancel_message = None
             await m.reply_text("**⚡ No active process to cancel.**")
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("start"))
 async def start(bot, m: Message):
     user_id = m.chat.id
@@ -564,6 +588,8 @@ async def start(bot, m: Message):
            f"**You are currently using the free version.** 🆓\n\n<blockquote expandable>I'm here to make your life easier by downloading videos from your **.txt** file 📄 and uploading them directly to Telegram!</blockquote>\n\n**Want to get started? Press /id**\n\n💬 Contact : [{CREDIT}⁬](tg://openmessage?user_id={OWNER}) to Get The Subscription 🎫 and unlock the full potential of your new bot! 🔓\n", disable_web_page_preview=True, reply_markup=keyboard
     )
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("back_to_main_menu"))
 async def back_to_main_menu(client, callback_query):
     user_id = callback_query.from_user.id
@@ -585,6 +611,8 @@ async def back_to_main_menu(client, callback_query):
     )
     await callback_query.answer()  
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("cmd_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
@@ -601,8 +629,7 @@ async def cmd(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("user_command"))
 async def help_button(client, callback_query):
   user_id = callback_query.from_user.id
@@ -640,7 +667,7 @@ async def help_button(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("owner_command"))
 async def help_button(client, callback_query):
   user_id = callback_query.from_user.id
@@ -668,6 +695,8 @@ async def help_button(client, callback_query):
     reply_markup=keyboard
   )
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("upgrade_command"))
 async def upgrade_button(client, callback_query):
   user_id = callback_query.from_user.id
@@ -701,7 +730,8 @@ async def upgrade_button(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("setttings"))
 async def settings_button(client, callback_query):
     caption = "✨ <b>My Premium BOT Settings Panel</b> ✨"
@@ -722,7 +752,7 @@ async def settings_button(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("thummbnail_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
@@ -739,7 +769,7 @@ async def cmd(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("wattermark_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
@@ -756,7 +786,7 @@ async def cmd(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("set_token_command"))
 async def cmd(client, callback_query):
     user_id = callback_query.from_user.id
@@ -774,7 +804,7 @@ async def cmd(client, callback_query):
     ),
     reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("caption_style_command"))
 async def handle_caption(client, callback_query):
     global caption
@@ -812,7 +842,7 @@ async def handle_caption(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Caption Style:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("file_name_command"))
 async def handle_caption(client, callback_query):
     global filename
@@ -832,7 +862,7 @@ async def handle_caption(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set End File Name:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("viideo_thumbnail_command"))
 async def video_thumbnail(client, callback_query):
     global thumb
@@ -858,7 +888,7 @@ async def video_thumbnail(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set thumbnail:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("pddf_thumbnail_command"))
 async def pdf_thumbnail_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="thummbnail_command")]])
@@ -870,7 +900,7 @@ async def pdf_thumbnail_button(client, callback_query):
     ),
     reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("add_credit_command"))
 async def credit(client, callback_query):
     global CR
@@ -892,7 +922,7 @@ async def credit(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Credit:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-        
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("cp_token_command"))
 async def handle_token(client, callback_query):
     global cptoken
@@ -908,7 +938,7 @@ async def handle_token(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Classplus Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("pw_token_command"))
 async def handle_token(client, callback_query):
     global pwtoken
@@ -924,7 +954,7 @@ async def handle_token(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Physics Wallah Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("cw_token_command"))
 async def handle_token(client, callback_query):
     global cwtoken
@@ -945,7 +975,7 @@ async def handle_token(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Careerwill Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("video_watermark_command"))
 async def video_watermark(client, callback_query):
     global vidwatermark
@@ -967,8 +997,7 @@ async def video_watermark(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Watermark:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("pdf_watermark_command"))
 async def pdf_watermark_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="wattermark_command")]])
@@ -980,7 +1009,7 @@ async def pdf_watermark_button(client, callback_query):
     ),
     reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("quality_command"))
 async def handle_quality(client, callback_query):
     global raw_text2, quality, res
@@ -1029,7 +1058,7 @@ async def handle_quality(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Video Quality:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("topic_command"))
 async def video_watermark(client, callback_query):
     global topic
@@ -1051,7 +1080,7 @@ async def video_watermark(client, callback_query):
         await editable.edit(f"<b>❌ Failed to set Topic in Caption:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
     finally:
         await input_msg.delete()
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("resset_command"))
 async def credit(client, callback_query):
     global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
@@ -1084,7 +1113,8 @@ async def credit(client, callback_query):
     finally:
         await input_msg.delete()
 
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("feat_command"))
 async def feature_button(client, callback_query):
   caption = "**✨ My Premium BOT Features :**"
@@ -1104,7 +1134,7 @@ async def feature_button(client, callback_query):
     ),
     reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("pin_command"))
 async def pin_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1116,7 +1146,7 @@ async def pin_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-    
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("watermark_command"))
 async def watermark_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1128,8 +1158,7 @@ async def watermark_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("reset_command"))
 async def restart_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1141,7 +1170,7 @@ async def restart_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("logs_command"))
 async def pin_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1153,7 +1182,7 @@ async def pin_button(client, callback_query):
       ),
       reply_markup=keyboard
     )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("custom_command"))
 async def custom_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1165,7 +1194,7 @@ async def custom_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("titlle_command"))
 async def titlle_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1177,7 +1206,7 @@ async def titlle_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("broadcast_command"))
 async def pin_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1189,7 +1218,7 @@ async def pin_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("txt_maker_command"))
 async def editor_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1201,7 +1230,7 @@ async def editor_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("yt_command"))
 async def y2t_button(client, callback_query):
   keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
@@ -1213,7 +1242,10 @@ async def y2t_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-         
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
 @bot.on_message(filters.command(["id"]))
 async def id_command(client, message: Message):
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton(text="Send to Owner", url=f"tg://openmessage?user_id={OWNER}")]])
@@ -1224,6 +1256,8 @@ async def id_command(client, message: Message):
         await message.reply_text(text)
     else:
         await message.reply_text(text, reply_markup=keyboard)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.private & filters.command(["info"]))
 async def info(bot: Client, update: Message):
@@ -1245,6 +1279,7 @@ async def info(bot: Client, update: Message):
         reply_markup=BUTTONSCONTACT
     )
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.command(["logs"]))
 async def send_logs(client: Client, m: Message):  # Correct parameter name
@@ -1255,6 +1290,8 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
             await sent.delete()
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.private & (filters.document | filters.text))
 async def universal_drm_handler(bot: Client, m: Message):
@@ -1797,9 +1834,39 @@ async def universal_drm_handler(bot: Client, m: Message):
             await bot.send_message(channel_id, f"<b>-┈━═.•°✅ Completed ✅°•.═━┈-</b>\n<blockquote><b>🎯Batch Name : {b_name}</b></blockquote>\n<blockquote>🔗 Total URLs: {len(links)} \n┃   ┠🔴 Total Failed URLs: {failed_count}\n┃   ┠🟢 Total Successful URLs: {success_count}\n┃   ┃   ┠🎥 Total Video URLs: {video_count}\n┃   ┃   ┠📄 Total PDF URLs: {pdf_count}\n┃   ┃   ┠📸 Total IMAGE URLs: {img_count}</blockquote>\n")
             await bot.send_message(m.chat.id, f"<blockquote><b>✅ Your Task is completed, please check your Set Channel📱</b></blockquote>")
 
+#...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
+@bot.on_message(filters.command(["t2h"]))
+async def txt_handler(bot: Client, message: Message):
+    editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
+    input: Message = await bot.listen(editable.chat.id)
+    if input.document and input.document.file_name.endswith('.txt'):
+        file_path = await input.download()
+        file_name, ext = os.path.splitext(os.path.basename(file_path))        
+    else:
+        await message.reply_text("**• Invalid file input.**")
+        return
+           
+    with open(file_path, "r") as f:
+        file_content = f.read()
+
+    urls = txthtml.extract_names_and_urls(file_content)
+
+    videos, pdfs, others = txthtml.categorize_urls(urls)
+
+    html_content = txthtml.generate_html(file_name, videos, pdfs, others)
+    html_file_path = file_path.replace(".txt", ".html")
+    with open(html_file_path, "w") as f:
+        f.write(html_content)
+
+    await message.reply_document(document=html_file_path, caption="✅ 𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**❖")
 
 
-#...............…........
+    os.remove(file_path)
+    os.remove(html_file_path)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
 def notify_owner():
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
     data = {
@@ -1823,6 +1890,7 @@ def reset_and_set_commands():
         {"command": "y2t", "description": "🔪 YouTube → .txt Converter"},
         {"command": "ytm", "description": "🎶 YouTube → .mp3 downloader"},
         {"command": "t2t", "description": "📟 Text → .txt Generator"},
+        {"command": "t2h", "description": "🌐 .txt → .html Generator"},
         {"command": "logs", "description": "👁️ View Bot Activity"},
         {"command": "broadcast", "description": "📢 Broadcast to All Users"},
         {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
