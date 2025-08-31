@@ -292,7 +292,7 @@ async def download_and_decrypt_video(url, cmd, name, key):
             print(f"Failed to decrypt {video_path}.")  
             return None  
 
-async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, thumb, name, prog, channel_id):
+async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, watermark_seconds, thumb, name, prog, channel_id):
     subprocess.run(f'ffmpeg -i "{filename}" -ss 00:00:10 -vframes 1 "{filename}.jpg"', shell=True)
     await prog.delete (True)
     reply1 = await bot.send_message(channel_id, f"**📩 Uploading Video 📩:-**\n<blockquote>**{name}**</blockquote>")
@@ -313,6 +313,20 @@ async def send_vid(bot: Client, m: Message, cc, filename, vidwatermark, thumb, n
                 shell=True
             )
             
+            if watermark_seconds > 0:
+                enable_expr = f":enable='lte(t,{watermark_seconds})'"
+            else:
+                enable_expr = ""
+    
+            ffmpeg_cmd = (
+                f'ffmpeg -i "{filename}" '
+                f'-vf "drawtext=fontfile={font_path}:text=\'{vidwatermark}\''
+                f':fontcolor=white@0.4:fontsize=h/6:x=(w-text_w)/2:y=(h-text_h)/2'
+                f'{enable_expr}\" -codec:a copy \"{w_filename}\"'
+            )
+            subprocess.run(ffmpeg_cmd, shell=True)
+
+    
     except Exception as e:
         await m.reply_text(str(e))
 
