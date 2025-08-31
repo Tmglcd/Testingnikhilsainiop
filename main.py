@@ -1300,7 +1300,8 @@ async def txt_handler(bot: Client, message: Message):
     input: Message = await bot.listen(editable.chat.id)
     if input.document and input.document.file_name.endswith('.txt'):
         file_path = await input.download()
-        file_name, ext = os.path.splitext(os.path.basename(file_path))        
+        file_name, ext = os.path.splitext(os.path.basename(file_path))
+        b_name = file_name.replace('_', ' ')
     else:
         await message.reply_text("**• Invalid file input.**")
         return
@@ -1317,8 +1318,7 @@ async def txt_handler(bot: Client, message: Message):
     with open(html_file_path, "w") as f:
         f.write(html_content)
 
-    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
-    await bot.send_document(OWNER, document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
+    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n<blockquote><b>{b_name}</b></blockquote>\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
     os.remove(file_path)
     os.remove(html_file_path)
     
