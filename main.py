@@ -1338,8 +1338,8 @@ async def universal_drm_handler(bot: Client, m: Message):
         path = f"./downloads/{m.chat.id}"
         with open(x, "r") as f:
             content = f.read()
-        os.remove(x)
         lines = content.split("\n")
+        os.remove(x)
     elif m.text and "://" in m.text:
         lines = [m.text]
     else:
