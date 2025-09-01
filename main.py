@@ -564,7 +564,7 @@ async def start(bot, m: Message):
     if m.chat.id in AUTH_USERS:
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="setttings")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
@@ -597,7 +597,7 @@ async def back_to_main_menu(client, callback_query):
     caption = f"✨ **Welcome [{first_name}](tg://user?id={user_id}) in My uploader bot**"
     keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("✨ Commands", callback_data="cmd_command")],
-            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("✨ Settings", callback_data="setttings")],
+            [InlineKeyboardButton("💎 Features", callback_data="feat_command"), InlineKeyboardButton("⚙️ Settings", callback_data="setttings")],
             [InlineKeyboardButton("💳 Plans", callback_data="upgrade_command")],
             [InlineKeyboardButton(text="📞 Contact", url=f"tg://openmessage?user_id={OWNER}"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/nikhilsainiop/saini-txt-direct")],
         ])
