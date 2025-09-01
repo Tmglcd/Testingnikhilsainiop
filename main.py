@@ -642,7 +642,8 @@ async def help_button(client, callback_query):
         f"➥ /start – Bot Status Check\n"
         f"➥ /y2t – YouTube → .txt Converter\n"  
         f"➥ /ytm – YouTube → .mp3 downloader\n"  
-        f"➥ /t2t – Text → .txt Generator\n" 
+        f"➥ /t2t – Text → .txt Generator\n"
+        f"➥ /t2h – .txt → .html Converter\n" 
         f"➥ /stop – Cancel Running Task\n"
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰ \n" 
         f"⚙️ 𝗧𝗼𝗼𝗹𝘀 & 𝗦𝗲𝘁𝘁𝗶𝗻𝗴𝘀: \n\n" 
@@ -1124,6 +1125,7 @@ async def feature_button(client, callback_query):
       [InlineKeyboardButton("🖨️ Bot Working Logs", callback_data="logs_command")],
       [InlineKeyboardButton("🖋️ File Name", callback_data="custom_command"), InlineKeyboardButton("🏷️ Title", callback_data="titlle_command")],
       [InlineKeyboardButton("🎥 YouTube", callback_data="yt_command")],
+      [InlineKeyboardButton("🌐 HTML", callback_data="html_command")],
       [InlineKeyboardButton("📝 Text File", callback_data="txt_maker_command"), InlineKeyboardButton("📢 Broadcast", callback_data="broadcast_command")],
       [InlineKeyboardButton("🔙 Back to Main Menu", callback_data="back_to_main_menu")]
   ])
@@ -1243,6 +1245,19 @@ async def y2t_button(client, callback_query):
       reply_markup=keyboard
   )
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_callback_query(filters.regex("html_command"))
+async def y2t_button(client, callback_query):
+  keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Feature", callback_data="feat_command")]])
+  caption = f"**HTML Commands:**\n\n◆/t2h - 🌐 .txt → .html Converter"
+  await callback_query.message.edit_media(
+    InputMediaPhoto(
+      media="https://envs.sh/GVI.jpg",
+      caption=caption
+      ),
+      reply_markup=keyboard
+  )
+    
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
@@ -1891,7 +1906,7 @@ def reset_and_set_commands():
         {"command": "y2t", "description": "🔪 YouTube → .txt Converter"},
         {"command": "ytm", "description": "🎶 YouTube → .mp3 downloader"},
         {"command": "t2t", "description": "📟 Text → .txt Generator"},
-        {"command": "t2h", "description": "🌐 .txt → .html Generator"},
+        {"command": "t2h", "description": "🌐 .txt → .html Converter"},
         {"command": "logs", "description": "👁️ View Bot Activity"},
         {"command": "broadcast", "description": "📢 Broadcast to All Users"},
         {"command": "broadusers", "description": "👨‍❤️‍👨 All Broadcasting Users"},
