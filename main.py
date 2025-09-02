@@ -20,7 +20,8 @@ from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
 import html_handler
-from youtube_handler import ytm_handler, y2t_handler
+from text_handler import text_to_txt
+from youtube_handler import ytm_handler, y2t_handler, getcookies_handler, cookies_handler
 from utils import progress_bar
 from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS, cookies_file_path
 from aiohttp import ClientSession
@@ -215,78 +216,14 @@ async def broadusers_handler(client: Client, message: Message):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("cookies") & filters.private)
-async def cookies_handler(client: Client, m: Message):
-    editable = await m.reply_text(
-        "**Please upload the YouTube Cookies file (.txt format).**",
-        quote=True
-    )
-
-    try:
-        # Wait for the user to send the cookies file
-        input_message: Message = await client.listen(m.chat.id)
-
-        # Validate the uploaded file
-        if not input_message.document or not input_message.document.file_name.endswith(".txt"):
-            await m.reply_text("Invalid file type. Please upload a .txt file.")
-            return
-
-        # Download the cookies file
-        downloaded_path = await input_message.download()
-
-        # Read the content of the uploaded file
-        with open(downloaded_path, "r") as uploaded_file:
-            cookies_content = uploaded_file.read()
-
-        # Replace the content of the target cookies file
-        with open(cookies_file_path, "w") as target_file:
-            target_file.write(cookies_content)
-
-        await editable.delete()
-        await input_message.delete()
-        await m.reply_text(
-            "✅ Cookies updated successfully.\n📂 Saved in `youtube_cookies.txt`."
-        )
-
-    except Exception as e:
-        await m.reply_text(f"__**Failed Reason**__\n<blockquote>{str(e)}</blockquote>")
+async def call_cookies_handler(client: Client, m: Message):
+    await cookies_handler(client, m)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["t2t"]))
-async def text_to_txt(client, message: Message):
-    user_id = str(message.from_user.id)
-    # Inform the user to send the text data and its desired file name
-    editable = await message.reply_text(f"<blockquote><b>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</b></blockquote>")
-    input_message: Message = await bot.listen(message.chat.id)
-    if not input_message.text:
-        await message.reply_text("**Send valid text data**")
-        return
-
-    text_data = input_message.text.strip()
-    await input_message.delete()  # Corrected here
-    
-    await editable.edit("**🔄 Send file name or send /d for filename**")
-    inputn: Message = await bot.listen(message.chat.id)
-    raw_textn = inputn.text
-    await inputn.delete()  # Corrected here
-    await editable.delete()
-
-    if raw_textn == '/d':
-        custom_file_name = 'txt_file'
-    else:
-        custom_file_name = raw_textn
-
-    txt_file = os.path.join("downloads", f'{custom_file_name}.txt')
-    os.makedirs(os.path.dirname(txt_file), exist_ok=True)  # Ensure the directory exists
-    with open(txt_file, 'w') as f:
-        f.write(text_data)
-        
-    await message.reply_document(document=txt_file, caption=f"`{custom_file_name}.txt`\n\n<blockquote>You can now download your content! 📥</blockquote>")
-    os.remove(txt_file)
-
-# Define paths for uploaded file and processed file
-UPLOAD_FOLDER = '/path/to/upload/folder'
-EDITED_FILE_PATH = '/path/to/save/edited_output.txt'
+async def call_text_to_txt(bot: Client, m: Message):
+    await text_to_txt(bot, m)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
@@ -301,17 +238,10 @@ async def call_ytm_handler(bot: Client, m: Message):
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
 @bot.on_message(filters.command("getcookies") & filters.private)
-async def getcookies_handler(client: Client, m: Message):
-    try:
-        # Send the cookies file to the user
-        await client.send_document(
-            chat_id=m.chat.id,
-            document=cookies_file_path,
-            caption="Here is the `youtube_cookies.txt` file."
-        )
-    except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")     
+async def call_getcookies_handler(client: Client, m: Message):
+    await getcookies_handler(client, m)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 m_file_path= "main.py"
