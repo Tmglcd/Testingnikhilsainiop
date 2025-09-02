@@ -892,28 +892,28 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("addauth") & filters.private)
 async def call_add_auth_user(client: Client, message: Message):
-    await add_auth_user(client, m)
+    await add_auth_user(client, message)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("users") & filters.private)
 async def call_list_auth_users(client: Client, message: Message):
-    await list_auth_users(client, m)
+    await list_auth_users(client, message)
     
     # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("rmauth") & filters.private)
 async def call_remove_auth_user(client: Client, message: Message):
-    await remove_auth_user(client, m)
+    await remove_auth_user(client, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("broadcast") & filters.private)
 async def call_broadcast_handler(client: Client, message: Message):
-    await broadcast_handler(client, m)
+    await broadcast_handler(client, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("broadusers") & filters.private)
 async def call_broadusers_handler(client: Client, message: Message):
-    await broadusers_handler(client, m)
+    await broadusers_handler(client, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
