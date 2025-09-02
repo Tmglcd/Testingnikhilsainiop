@@ -2,7 +2,6 @@ from vars import OWNER, CREDIT
 
 processing_request = False
 cancel_requested = False
-cancel_message = None
 caption = '/cc1'
 endfilename = '/d'
 thumb = '/d'
