@@ -16,7 +16,7 @@ async def ytm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested
     processing_request = True
     cancel_requested = False
-    editable = await m.reply_text("__**Input Type**__\n\n<blockquote><b>01 •Send me the .txt file containing YouTube links\n02 •Send Single link or Set of YouTube multiple links</b></blockquote>")
+    editable = await m.reply_text("**Input Type**\n\n<blockquote><b>01 •Send me the .txt file containing YouTube links\n02 •Send Single link or Set of YouTube multiple links</b></blockquote>")
     input: Message = await bot.listen(editable.chat.id)
     if input.document and input.document.file_name.endswith(".txt"):
         x = await input.download()
