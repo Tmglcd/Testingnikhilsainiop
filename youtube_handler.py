@@ -11,7 +11,11 @@ from pyrogram.errors import FloodWait
 from vars import CREDIT, cookies_file_path, AUTH_USERS
 import globals
 
+#============================================================================================================================
+processing_request = globals.processing_request
+cancel_requested = globals.cancel_requested
 #==============================================================================================================================
+
 async def cookies_handler(client: Client, m: Message):
     editable = await m.reply_text(
         "**Please upload the YouTube Cookies file (.txt format).**",
@@ -61,9 +65,9 @@ async def getcookies_handler(client: Client, m: Message):
 
 #==========================================================================================================================================================================================
 async def ytm_handler(bot: Client, m: Message):
-    #global processing_request, cancel_requested
-    globals.processing_request = True
-    globals.cancel_requested = False
+    global processing_request, cancel_requested
+    processing_request = True
+    cancel_requested = False
     editable = await m.reply_text("**Input Type**\n\n<blockquote><b>01 •Send me the .txt file containing YouTube links\n02 •Send Single link or Set of YouTube multiple links</b></blockquote>")
     input: Message = await bot.listen(editable.chat.id)
     if input.document and input.document.file_name.endswith(".txt"):
@@ -120,10 +124,10 @@ async def ytm_handler(bot: Client, m: Message):
  
     try:
         for i in range(arg-1, len(links)):  # Iterate over each link
-            if globals.cancel_requested:
+            if cancel_requested:
                 await m.reply_text("🚦**STOPPED**🚦")
-                globals.processing_request = False
-                globals.cancel_requested = False
+                processing_request = False
+                cancel_requested = False
                 return
             Vxy = links[i][1].replace("www.youtube-nocookie.com/embed", "youtu.be")
             url = "https://" + Vxy
