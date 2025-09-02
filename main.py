@@ -212,82 +212,6 @@ async def broadusers_handler(client: Client, message: Message):
         + "\n".join(user_infos)
     )
     await message.reply_text(text)
-    
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("cookies") & filters.private)
-async def call_cookies_handler(client: Client, m: Message):
-    await cookies_handler(client, m)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["t2t"]))
-async def call_text_to_txt(bot: Client, m: Message):
-    await text_to_txt(bot, m)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["y2t"]))
-async def call_y2t_handler(bot: Client, m: Message):
-    await y2t_handler(bot, m)
-
-
-@bot.on_message(filters.command(["ytm"]))
-async def call_ytm_handler(bot: Client, m: Message):
-    await ytm_handler(bot, m)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
-@bot.on_message(filters.command("getcookies") & filters.private)
-async def call_getcookies_handler(client: Client, m: Message):
-    await getcookies_handler(client, m)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-m_file_path= "main.py"
-@bot.on_message(filters.command("mfile") & filters.private)
-async def getcookies_handler(client: Client, m: Message):
-    try:
-        await client.send_document(
-            chat_id=m.chat.id,
-            document=m_file_path,
-            caption="Here is the `main.py` file."
-        )
-    except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["reset"]))
-async def restart_handler(_, m):
-    if m.chat.id != OWNER:
-        return
-    else:
-        await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
-        os.execl(sys.executable, sys.executable, *sys.argv)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("stop") & filters.private)
-async def cancel_handler(client: Client, m: Message):
-    global processing_request, cancel_requested
-    if m.chat.id not in AUTH_USERS:
-        print(f"User ID not in AUTH_USERS", m.chat.id)
-        await bot.send_message(
-            m.chat.id, 
-            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
-            f"__**PLEASE /upgrade YOUR PLAN**__\n"
-            f"__**Send me your user id for authorization**__\n"
-            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
-        )
-    else:
-        if processing_request:
-            cancel_requested = True
-            await m.delete()
-            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
-        else:
-            cancel_message = None
-            await m.reply_text("**⚡ No active process to cancel.**")
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
@@ -1080,7 +1004,80 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("cookies") & filters.private)
+async def call_cookies_handler(client: Client, m: Message):
+    await cookies_handler(client, m)
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command(["t2t"]))
+async def call_text_to_txt(bot: Client, m: Message):
+    await text_to_txt(bot, m)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command(["y2t"]))
+async def call_y2t_handler(bot: Client, m: Message):
+    await y2t_handler(bot, m)
+
+
+@bot.on_message(filters.command(["ytm"]))
+async def call_ytm_handler(bot: Client, m: Message):
+    await ytm_handler(bot, m)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
+@bot.on_message(filters.command("getcookies") & filters.private)
+async def call_getcookies_handler(client: Client, m: Message):
+    await getcookies_handler(client, m)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+m_file_path= "main.py"
+@bot.on_message(filters.command("mfile") & filters.private)
+async def mainfile_handler(client: Client, m: Message):
+    try:
+        await client.send_document(
+            chat_id=m.chat.id,
+            document=m_file_path,
+            caption="Here is the `main.py` file."
+        )
+    except Exception as e:
+        await m.reply_text(f"⚠️ An error occurred: {str(e)}")
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command(["reset"]))
+async def restart_handler(_, m):
+    if m.chat.id != OWNER:
+        return
+    else:
+        await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("stop") & filters.private)
+async def cancel_handler(client: Client, m: Message):
+    global processing_request, cancel_requested
+    if m.chat.id not in AUTH_USERS:
+        print(f"User ID not in AUTH_USERS", m.chat.id)
+        await bot.send_message(
+            m.chat.id, 
+            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
+            f"__**PLEASE /upgrade YOUR PLAN**__\n"
+            f"__**Send me your user id for authorization**__\n"
+            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
+        )
+    else:
+        if processing_request:
+            cancel_requested = True
+            await m.delete()
+            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
+        else:
+            cancel_message = None
+            await m.reply_text("**⚡ No active process to cancel.**")
 #...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.command(["t2h"]))
