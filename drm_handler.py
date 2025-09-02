@@ -236,6 +236,7 @@ async def drm_handler(bot: Client, m: Message):
                 await m.reply_text("🚦**STOPPED**🚦")
                 globals.processing_request = False
                 globals.cancel_requested = False
+                await cancel_message.delete(True)
                 return
   
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
