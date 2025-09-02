@@ -19,7 +19,7 @@ from base64 import b64encode, b64decode
 from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
-import html_handler
+from html_handler import html_handler
 import globals
 from authorisation import add_auth_user, list_auth_users, remove_auth_user
 from broadcast import broadcast_handler, broadusers_handler
@@ -847,6 +847,39 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command(["reset"]))
+async def restart_handler(_, m):
+    if m.chat.id != OWNER:
+        return
+    else:
+        await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("stop") & filters.private)
+async def cancel_handler(client: Client, m: Message):
+    #global processing_request, cancel_requested
+    if m.chat.id not in AUTH_USERS:
+        print(f"User ID not in AUTH_USERS", m.chat.id)
+        await bot.send_message(
+            m.chat.id, 
+            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
+            f"__**PLEASE /upgrade YOUR PLAN**__\n"
+            f"__**Send me your user id for authorization**__\n"
+            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
+        )
+    else:
+        if globals.processing_request:
+            globals.cancel_requested = True
+            await m.delete()
+            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
+        else:
+            cancel_message = None
+            await m.reply_text("**⚡ No active process to cancel.**")
+            
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("addauth") & filters.private)
 async def call_add_auth_user(client: Client, message: Message):
     await add_auth_user(client, message)
@@ -890,7 +923,7 @@ async def call_text_to_txt(bot: Client, m: Message):
 async def call_y2t_handler(bot: Client, m: Message):
     await y2t_handler(bot, m)
 
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["ytm"]))
 async def call_ytm_handler(bot: Client, m: Message):
     await ytm_handler(bot, m)
@@ -902,80 +935,11 @@ async def call_ytm_handler(bot: Client, m: Message):
 async def call_getcookies_handler(client: Client, m: Message):
     await getcookies_handler(client, m)
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-m_file_path= "main.py"
-@bot.on_message(filters.command("mfile") & filters.private)
-async def mainfile_handler(client: Client, m: Message):
-    try:
-        await client.send_document(
-            chat_id=m.chat.id,
-            document=m_file_path,
-            caption="Here is the `main.py` file."
-        )
-    except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command(["reset"]))
-async def restart_handler(_, m):
-    if m.chat.id != OWNER:
-        return
-    else:
-        await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
-        os.execl(sys.executable, sys.executable, *sys.argv)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("stop") & filters.private)
-async def cancel_handler(client: Client, m: Message):
-    #global processing_request, cancel_requested
-    if m.chat.id not in AUTH_USERS:
-        print(f"User ID not in AUTH_USERS", m.chat.id)
-        await bot.send_message(
-            m.chat.id, 
-            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
-            f"__**PLEASE /upgrade YOUR PLAN**__\n"
-            f"__**Send me your user id for authorization**__\n"
-            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
-        )
-    else:
-        if globals.processing_request:
-            globals.cancel_requested = True
-            await m.delete()
-            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
-        else:
-            cancel_message = None
-            await m.reply_text("**⚡ No active process to cancel.**")
 #...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.command(["t2h"]))
-async def txt_handler(bot: Client, message: Message):
-    editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
-    input: Message = await bot.listen(editable.chat.id)
-    if input.document and input.document.file_name.endswith('.txt'):
-        file_path = await input.download()
-        file_name, ext = os.path.splitext(os.path.basename(file_path))
-        b_name = file_name.replace('_', ' ')
-    else:
-        await message.reply_text("**• Invalid file input.**")
-        return
-           
-    with open(file_path, "r") as f:
-        file_content = f.read()
-
-    urls = html_handler.extract_names_and_urls(file_content)
-
-    videos, pdfs, others = html_handler.categorize_urls(urls)
-
-    html_content = html_handler.generate_html(file_name, videos, pdfs, others)
-    html_file_path = file_path.replace(".txt", ".html")
-    with open(html_file_path, "w") as f:
-        f.write(html_content)
-
-    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n<blockquote><b>`{b_name}`</b></blockquote>\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
-    os.remove(file_path)
-    os.remove(html_file_path)
+async def call_html_handler(bot: Client, message: Message):
+    await html_handler(bot, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
