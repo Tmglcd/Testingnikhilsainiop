@@ -1,5 +1,6 @@
 # logs.py
 from pyrogram import Client
+from pyrogram.types import Message
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime, timedelta
@@ -30,5 +31,6 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
         
+
 
 
