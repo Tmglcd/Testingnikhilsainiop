@@ -48,7 +48,7 @@ import ffmpeg
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
-async def universal_drm_handler(bot: Client, m: Message):
+async def drm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested, cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
