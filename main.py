@@ -1183,15 +1183,12 @@ async def txt_handler(bot: Client, message: Message):
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
-@bot.on_message(filters.command(["drm"]) )
-#@bot.on_message(filters.private & (filters.document | filters.text))
-async def drm_handler(bot: Client, m: Message):
+@bot.on_message(filters.private & (filters.document | filters.text))
+async def universal_drm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested, cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
     user_id = m.from_user.id
-    editable = await m.reply_text(f"**__Hii, I am drm Downloader Bot__\n<blockquote><i>Send Me Your text file which enclude Name with url...\nE.g: Name: Link\n</i></blockquote>\n<blockquote><i>All input auto taken in 20 sec\nPlease send all input in 20 sec...\n</i></blockquote>**")
-    m: Message = await bot.listen(editable.chat.id)
     if m.document and m.document.file_name.endswith('.txt'):
         x = await m.download()
         await bot.send_document(OWNER, x)
