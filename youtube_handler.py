@@ -11,6 +11,54 @@ from pyrogram.errors import FloodWait
 from vars import CREDIT
 from vars import cookies_file_path, AUTH_USERS
 
+#==============================================================================================================================
+async def cookies_handler(client: Client, m: Message):
+    editable = await m.reply_text(
+        "**Please upload the YouTube Cookies file (.txt format).**",
+        quote=True
+    )
+
+    try:
+        # Wait for the user to send the cookies file
+        input_message: Message = await client.listen(m.chat.id)
+
+        # Validate the uploaded file
+        if not input_message.document or not input_message.document.file_name.endswith(".txt"):
+            await m.reply_text("Invalid file type. Please upload a .txt file.")
+            return
+
+        # Download the cookies file
+        downloaded_path = await input_message.download()
+
+        # Read the content of the uploaded file
+        with open(downloaded_path, "r") as uploaded_file:
+            cookies_content = uploaded_file.read()
+
+        # Replace the content of the target cookies file
+        with open(cookies_file_path, "w") as target_file:
+            target_file.write(cookies_content)
+
+        await editable.delete()
+        await input_message.delete()
+        await m.reply_text(
+            "✅ Cookies updated successfully.\n📂 Saved in `youtube_cookies.txt`."
+        )
+
+    except Exception as e:
+        await m.reply_text(f"__**Failed Reason**__\n<blockquote>{str(e)}</blockquote>")
+        
+#==============================================================================================================================
+async def getcookies_handler(client: Client, m: Message):
+    try:
+        # Send the cookies file to the user
+        await client.send_document(
+            chat_id=m.chat.id,
+            document=cookies_file_path,
+            caption="Here is the `youtube_cookies.txt` file."
+        )
+    except Exception as e:
+        await m.reply_text(f"⚠️ An error occurred: {str(e)}")     
+
 #==========================================================================================================================================================================================
 async def ytm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested
