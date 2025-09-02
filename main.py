@@ -395,7 +395,7 @@ async def handle_caption(client, callback_query):
             await editable.edit(f"✅ End File Name Disabled !", reply_markup=keyboard)
         else:
             globals.endfilename = input_msg.text
-            await editable.edit(f"✅ End File Name `{endfilename}` is enabled!", reply_markup=keyboard)
+            await editable.edit(f"✅ End File Name `{globals.endfilename}` is enabled!", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set End File Name:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -453,7 +453,7 @@ async def credit(client, callback_query):
 
         else:
             globals.CR = input_msg.text
-            await editable.edit(f"✅ Credit set as {CR} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Credit set as {globals.CR} !", reply_markup=keyboard)
 
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Credit:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -468,7 +468,7 @@ async def handle_token(client, callback_query):
     input_msg = await bot.listen(editable.chat.id)
     try:
         globals.cptoken = input_msg.text
-        await editable.edit(f"✅ Classplus Token set successfully !\n\n<blockquote expandable>`{cptoken}`</blockquote>", reply_markup=keyboard)
+        await editable.edit(f"✅ Classplus Token set successfully !\n\n<blockquote expandable>`{globals.cptoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Classplus Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -483,7 +483,7 @@ async def handle_token(client, callback_query):
     input_msg = await bot.listen(editable.chat.id)
     try:
         globals.pwtoken = input_msg.text
-        await editable.edit(f"✅ Physics Wallah Token set successfully !\n\n<blockquote expandable>`{pwtoken}`</blockquote>", reply_markup=keyboard)
+        await editable.edit(f"✅ Physics Wallah Token set successfully !\n\n<blockquote expandable>`{globals.pwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Physics Wallah Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -503,7 +503,7 @@ async def handle_token(client, callback_query):
 
         else:
             globals.cwtoken = input_msg.text
-            await editable.edit(f"✅ Carrerwill Token set successfully !\n\n<blockquote expandable>`{cwtoken}`</blockquote>", reply_markup=keyboard)
+            await editable.edit(f"✅ Carrerwill Token set successfully !\n\n<blockquote expandable>`{globals.cwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Careerwill Token:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -524,7 +524,7 @@ async def video_watermark(client, callback_query):
 
         else:
             globals.vidwatermark = input_msg.text
-            await editable.edit(f"Video Watermark {vidwatermark} enabled ✅!", reply_markup=keyboard)
+            await editable.edit(f"Video Watermark `{globals.vidwatermark}` enabled ✅!", reply_markup=keyboard)
 
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Watermark:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
@@ -554,37 +554,37 @@ async def handle_quality(client, callback_query):
             globals.raw_text2 = '144'
             globals.quality = f"{raw_text2}p"
             globals.res = '256x144'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "240":
             globals.raw_text2 = '240'
             globals.quality = f"{raw_text2}p"
             globals.res = '426x240'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "360":
             globals.raw_text2 = '360'
             globals.quality = f"{raw_text2}p"
             globals.res = '640x360'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "480":
             globals.raw_text2 = '480'
             globals.quality = f"{raw_text2}p"
             globals.res = '854x480'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "720":
             globals.raw_text2 = '720'
             globals.quality = f"{raw_text2}p"
             globals.res = '1280x720'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "1080":
             globals.raw_text2 = '1080'
             globals.quality = f"{raw_text2}p"
             globals.res = '1920x1080'
-            await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         else:
             globals.raw_text2 = '480'
             globals.quality = f"{raw_text2}p"
             globals.res = '854x480'
-            await editable.edit(f"✅ Video Quality set {quality} as Default !", reply_markup=keyboard)
+            await editable.edit(f"✅ Video Quality set {globals.quality} as Default !", reply_markup=keyboard)
             
     except Exception as e:
         await editable.edit(f"<b>❌ Failed to set Video Quality:</b>\n<blockquote expandable>{str(e)}</blockquote>", reply_markup=keyboard)
