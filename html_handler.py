@@ -432,7 +432,7 @@ def download_video(url, output_path):
 
 #======================================================================================================================================================================================
 
-async def txt_handler(bot: Client, message: Message):
+async def html_handler(bot: Client, message: Message):
     editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
     input: Message = await bot.listen(editable.chat.id)
     if input.document and input.document.file_name.endswith('.txt'):
@@ -446,11 +446,11 @@ async def txt_handler(bot: Client, message: Message):
     with open(file_path, "r") as f:
         file_content = f.read()
 
-    urls = html_handler.extract_names_and_urls(file_content)
+    urls = extract_names_and_urls(file_content)
 
-    videos, pdfs, others = html_handler.categorize_urls(urls)
+    videos, pdfs, others = categorize_urls(urls)
 
-    html_content = html_handler.generate_html(file_name, videos, pdfs, others)
+    html_content = generate_html(file_name, videos, pdfs, others)
     html_file_path = file_path.replace(".txt", ".html")
     with open(html_file_path, "w") as f:
         f.write(html_content)
