@@ -47,8 +47,6 @@ import shutil
 import ffmpeg
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-processing_request = globals.processing_request
-cancel_requested = globals.cancel_requested
 cancel_message = globals.cancel_message
 caption = globals.caption
 endfilename = globals.endfilename
@@ -66,7 +64,7 @@ topic = globals.topic
 
 
 async def drm_handler(bot: Client, m: Message):
-    global processing_request, cancel_requested, cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
+    global cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     processing_request = True
     cancel_requested = False
     user_id = m.from_user.id
@@ -235,10 +233,10 @@ async def drm_handler(bot: Client, m: Message):
     arg = int(raw_text)
     try:
         for i in range(arg-1, len(links)):
-            if cancel_requested:
+            if globals.cancel_requested:
                 await m.reply_text("🚦**STOPPED**🚦")
-                processing_request = False
-                cancel_requested = False
+                globals.processing_request = False
+                globals.cancel_requested = False
                 return
   
             Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
