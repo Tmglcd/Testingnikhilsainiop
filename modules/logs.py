@@ -5,6 +5,7 @@ from pyrogram.types import Message
 from pyrogram.types.messages_and_media import message
 from logging.handlers import RotatingFileHandler
 from datetime import datetime, timedelta
+from pyromod import listen
 
 # Set up logging
 logging.basicConfig(
@@ -26,12 +27,13 @@ logger = logging.getLogger()
 async def send_logs(client: Client, m: Message):  # Correct parameter name
     try:
         with open("logs.txt", "rb") as file:
-            sent = await m.reply_text("**📤 Sending you ....**")
+            sent = await m.reply("**📤 Sending you ....**")
             await m.reply_document(document=file)
             await sent.delete()
     except Exception as e:
-        await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
+        await m.reply(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
         
+
 
 
 
