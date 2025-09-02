@@ -112,7 +112,7 @@ async def ytm_handler(bot: Client, m: Message):
         await m.reply_text("<blockquote><b>All YouTube Music Download Successfully</b></blockquote>")
 
 #========================================================================================================================================================================================================
-async def y2t_handler(client, message: Message):
+async def y2t_handler(bot: Client, message: Message):
     user_id = str(message.from_user.id)
     
     editable = await message.reply_text(
