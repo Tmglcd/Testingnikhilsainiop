@@ -20,6 +20,7 @@ from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
 import html_handler
+import globals
 from authorisation import add_auth_user, list_auth_users, remove_auth_user
 from broadcast import broadcast_handler, broadusers_handler
 from text_handler import text_to_txt
