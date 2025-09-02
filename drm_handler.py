@@ -47,26 +47,25 @@ import shutil
 import ffmpeg
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-cancel_message = globals.cancel_message
-caption = globals.caption
-endfilename = globals.endfilename
-thumb = globals.thumb
-CR = globals.CR
-cwtoken = globals.cwtoken
-cptoken = globals.cptoken
-pwtoken = globals.pwtoken
-vidwatermark = globals.vidwatermark
-raw_text2 = globals.raw_text2
-quality = globals.quality
-res = globals.res
-topic = globals.topic
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 
 async def drm_handler(bot: Client, m: Message):
-    global cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     globals.processing_request = True
     globals.cancel_requested = False
+    cancel_message = globals.cancel_message
+    caption = globals.caption
+    endfilename = globals.endfilename
+    thumb = globals.thumb
+    CR = globals.CR
+    cwtoken = globals.cwtoken
+    cptoken = globals.cptoken
+    pwtoken = globals.pwtoken
+    vidwatermark = globals.vidwatermark
+    raw_text2 = globals.raw_text2
+    quality = globals.quality
+    res = globals.res
+    topic = globals.topic
+
     user_id = m.from_user.id
     if m.document and m.document.file_name.endswith('.txt'):
         x = await m.download()
