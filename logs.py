@@ -18,3 +18,16 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 # Initialize logger
 logger = logging.getLogger()
+
+#========================================================================
+
+async def send_logs(client: Client, m: Message):  # Correct parameter name
+    try:
+        with open("logs.txt", "rb") as file:
+            sent = await m.reply_text("**📤 Sending you ....**")
+            await m.reply_document(document=file)
+            await sent.delete()
+    except Exception as e:
+        await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
+        
+
