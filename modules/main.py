@@ -19,13 +19,13 @@ from base64 import b64encode, b64decode
 from logs import send_logs
 from bs4 import BeautifulSoup
 import saini as helper
-from html_handler import html_handler
-from drm_handler import drm_handler
+from handlers.html_handler import html_handler
+from handlers.drm_handler import drm_handler
 import globals
-from authorisation import add_auth_user, list_auth_users, remove_auth_user
-from broadcast import broadcast_handler, broadusers_handler
-from text_handler import text_to_txt
-from youtube_handler import ytm_handler, y2t_handler, getcookies_handler, cookies_handler
+from handlers.authorisation import add_auth_user, list_auth_users, remove_auth_user
+from handlers.broadcast import broadcast_handler, broadusers_handler
+from handlers.text_handler import text_to_txt
+from handlers.youtube_handler import ytm_handler, y2t_handler, getcookies_handler, cookies_handler
 from utils import progress_bar
 from vars import api_url, api_token, token_cp, adda_token, photologo, photoyt, photocp, photozip
 from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS, cookies_file_path
