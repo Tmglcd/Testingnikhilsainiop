@@ -786,8 +786,11 @@ async def y2t_button(client, callback_query):
       ),
       reply_markup=keyboard
   )
-    
+
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
+
+
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.command(["id"]))
@@ -836,7 +839,6 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["reset"]))
 async def restart_handler(_, m):
     if m.chat.id != OWNER:
@@ -845,7 +847,6 @@ async def restart_handler(_, m):
         await m.reply_text("𝐁𝐨𝐭 𝐢𝐬 𝐑𝐞𝐬𝐞𝐭𝐢𝐧𝐠...", True)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("stop") & filters.private)
 async def cancel_handler(client: Client, m: Message):
@@ -884,7 +885,6 @@ async def call_remove_auth_user(client: Client, message: Message):
     await remove_auth_user(client, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("broadcast") & filters.private)
 async def call_broadcast_handler(client: Client, message: Message):
     await broadcast_handler(client, message)
@@ -895,18 +895,15 @@ async def call_broadusers_handler(client: Client, message: Message):
     await broadusers_handler(client, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("cookies") & filters.private)
 async def call_cookies_handler(client: Client, m: Message):
     await cookies_handler(client, m)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["t2t"]))
 async def call_text_to_txt(bot: Client, m: Message):
     await text_to_txt(bot, m)
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["y2t"]))
 async def call_y2t_handler(bot: Client, m: Message):
@@ -917,21 +914,17 @@ async def call_y2t_handler(bot: Client, m: Message):
 async def call_ytm_handler(bot: Client, m: Message):
     await ytm_handler(bot, m)
 
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....
 @bot.on_message(filters.command("getcookies") & filters.private)
 async def call_getcookies_handler(client: Client, m: Message):
     await getcookies_handler(client, m)
 
 #...............…........# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
 @bot.on_message(filters.command(["t2h"]))
 async def call_html_handler(bot: Client, message: Message):
     await html_handler(bot, message)
     
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
 @bot.on_message(filters.private & (filters.document | filters.text))
 async def call_drm_handler(bot: Client, m: Message):
     await drm_handler(bot, m)
