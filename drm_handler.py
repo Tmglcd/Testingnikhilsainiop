@@ -47,6 +47,23 @@ import shutil
 import ffmpeg
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+processing_request = globals.processing_request
+cancel_requested = globals.cancel_requested
+cancel_message = globals.cancel_message
+caption = globals.caption
+endfilename = globals.endfilename
+thumb = globals.thumb
+CR = globals.CR
+cwtoken = globals.cwtoken
+cptoken = globals.cptoken
+pwtoken = globals.pwtoken
+vidwatermark = globals.vidwatermark
+raw_text2 = globals.raw_text2
+quality = globals.quality
+res = globals.res
+topic = globals.topic
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+
 
 async def drm_handler(bot: Client, m: Message):
     global processing_request, cancel_requested, cancel_message, caption, endfilename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
