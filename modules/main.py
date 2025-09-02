@@ -21,7 +21,7 @@ from bs4 import BeautifulSoup
 import saini as helper
 from handlers.html_handler import html_handler
 from handlers.drm_handler import drm_handler
-import globals
+import handlers.globals
 from handlers.authorisation import add_auth_user, list_auth_users, remove_auth_user
 from handlers.broadcast import broadcast_handler, broadusers_handler
 from handlers.text_handler import text_to_txt
