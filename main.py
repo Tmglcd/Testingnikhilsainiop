@@ -552,37 +552,37 @@ async def handle_quality(client, callback_query):
     try:
         if input_msg.text.lower() == "144":
             globals.raw_text2 = '144'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '256x144'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "240":
             globals.raw_text2 = '240'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '426x240'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "360":
             globals.raw_text2 = '360'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '640x360'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "480":
             globals.raw_text2 = '480'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '854x480'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "720":
             globals.raw_text2 = '720'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '1280x720'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "1080":
             globals.raw_text2 = '1080'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '1920x1080'
             await editable.edit(f"✅ Video Quality set {globals.quality} !", reply_markup=keyboard)
         else:
             globals.raw_text2 = '480'
-            globals.quality = f"{raw_text2}p"
+            globals.quality = f"{globals.raw_text2}p"
             globals.res = '854x480'
             await editable.edit(f"✅ Video Quality set {globals.quality} as Default !", reply_markup=keyboard)
             
