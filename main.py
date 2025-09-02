@@ -56,24 +56,6 @@ bot = Client(
 )
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
-processing_request = globals.processing_request
-cancel_requested = globals.cancel_requested
-cancel_message = globals.cancel_message
-caption = globals.caption
-endfilename = globals.endfilename
-thumb = globals.thumb
-CR = globals.CR
-cwtoken = globals.cwtoken
-cptoken = globals.cptoken
-pwtoken = globals.pwtoken
-vidwatermark = globals.vidwatermark
-raw_text2 = globals.raw_text2
-quality = globals.quality
-res = globals.res
-topic = globals.topic
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("start"))
 async def start(bot, m: Message):
@@ -366,7 +348,6 @@ async def cmd(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("caption_style_command"))
 async def handle_caption(client, callback_query):
-    global caption
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(
@@ -388,13 +369,13 @@ async def handle_caption(client, callback_query):
     input_msg = await bot.listen(editable.chat.id)
     try:
         if input_msg.text.lower() == "/cc1":
-            caption = '/cc1'
+            globals.caption = '/cc1'
             await editable.edit(f"✅ Caption Style 1 Updated!", reply_markup=keyboard)
         elif input_msg.text.lower() == "/cc2":
-            caption = '/cc2'
+            globals.caption = '/cc2'
             await editable.edit(f"✅ Caption Style 2 Updated!", reply_markup=keyboard)
         else:
-            caption = input_msg.text
+            globals.caption = input_msg.text
             await editable.edit(f"✅ Caption Style 3 Updated!", reply_markup=keyboard)
             
     except Exception as e:
@@ -404,17 +385,16 @@ async def handle_caption(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("file_name_command"))
 async def handle_caption(client, callback_query):
-    global endfilename
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit("**Send End File Name or Send /d**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
         if input_msg.text.lower() == "/d":
-            endfilename = '/d'
+            globals.endfilename = '/d'
             await editable.edit(f"✅ End File Name Disabled !", reply_markup=keyboard)
         else:
-            endfilename = input_msg.text
+            globals.endfilename = input_msg.text
             await editable.edit(f"✅ End File Name `{endfilename}` is enabled!", reply_markup=keyboard)
             
     except Exception as e:
@@ -424,7 +404,6 @@ async def handle_caption(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("viideo_thumbnail_command"))
 async def video_thumbnail(client, callback_query):
-    global thumb
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="thummbnail_command")]])
     editable = await callback_query.message.edit(f"Send the Video Thumb URL or Send /d \n<blockquote><b>Note </b>- For document format send : No</blockquote>", reply_markup=keyboard)
@@ -432,15 +411,15 @@ async def video_thumbnail(client, callback_query):
 
     try:
         if input_msg.text.startswith("http://") or input_msg.text.startswith("https://"):
-            thumb = input_msg.text
+            globals.thumb = input_msg.text
             await editable.edit(f"✅ Thumbnail set successfully from the URL !", reply_markup=keyboard)
 
         elif input_msg.text.lower() == "/d":
-            thumb = "/d"
+            globals.thumb = "/d"
             await editable.edit(f"✅ Thumbnail set to default !", reply_markup=keyboard)
 
         else:
-            thumb = input_msg.text
+            globals.thumb = input_msg.text
             await editable.edit(f"✅ Video in Document Format is enabled !", reply_markup=keyboard)
 
     except Exception as e:
@@ -462,7 +441,6 @@ async def pdf_thumbnail_button(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("add_credit_command"))
 async def credit(client, callback_query):
-    global CR
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"Send Credit Name or Send /d", reply_markup=keyboard)
@@ -470,11 +448,11 @@ async def credit(client, callback_query):
 
     try:
         if input_msg.text.lower() == "/d":
-            CR = f"{CREDIT}"
+            globals.CR = f"{CREDIT}"
             await editable.edit(f"✅ Credit set to default !", reply_markup=keyboard)
 
         else:
-            CR = input_msg.text
+            globals.CR = input_msg.text
             await editable.edit(f"✅ Credit set as {CR} !", reply_markup=keyboard)
 
     except Exception as e:
@@ -484,13 +462,12 @@ async def credit(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("cp_token_command"))
 async def handle_token(client, callback_query):
-    global cptoken
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Classplus Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
-        cptoken = input_msg.text
+        globals.cptoken = input_msg.text
         await editable.edit(f"✅ Classplus Token set successfully !\n\n<blockquote expandable>`{cptoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
@@ -500,13 +477,12 @@ async def handle_token(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("pw_token_command"))
 async def handle_token(client, callback_query):
-    global pwtoken
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Physics Wallah Same Batch Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
-        pwtoken = input_msg.text
+        globals.pwtoken = input_msg.text
         await editable.edit(f"✅ Physics Wallah Token set successfully !\n\n<blockquote expandable>`{pwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
@@ -516,18 +492,17 @@ async def handle_token(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("cw_token_command"))
 async def handle_token(client, callback_query):
-    global cwtoken
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="set_token_command")]])
     editable = await callback_query.message.edit("**Send Carrerwill Token**", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
         if input_msg.text.lower() == "/d":
-            cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
+            globals.cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
             await editable.edit(f"✅ Carrerwill Token set successfully as default !", reply_markup=keyboard)
 
         else:
-            cwtoken = input_msg.text
+            globals.cwtoken = input_msg.text
             await editable.edit(f"✅ Carrerwill Token set successfully !\n\n<blockquote expandable>`{cwtoken}`</blockquote>", reply_markup=keyboard)
             
     except Exception as e:
@@ -537,7 +512,6 @@ async def handle_token(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("video_watermark_command"))
 async def video_watermark(client, callback_query):
-    global vidwatermark
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="wattermark_command")]])
     editable = await callback_query.message.edit(f"**Send Video Watermark text or Send /d**", reply_markup=keyboard)
@@ -545,11 +519,11 @@ async def video_watermark(client, callback_query):
 
     try:
         if input_msg.text.lower() == "/d":
-            vidwatermark = "/d"
+            globals.vidwatermark = "/d"
             await editable.edit(f"**Video Watermark Disabled ✅** !", reply_markup=keyboard)
 
         else:
-            vidwatermark = input_msg.text
+            globals.vidwatermark = input_msg.text
             await editable.edit(f"Video Watermark {vidwatermark} enabled ✅!", reply_markup=keyboard)
 
     except Exception as e:
@@ -571,46 +545,45 @@ async def pdf_watermark_button(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("quality_command"))
 async def handle_quality(client, callback_query):
-    global raw_text2, quality, res
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit("__**Enter resolution or Video Quality (`144`, `240`, `360`, `480`, `720`, `1080`) or Send /d**__", reply_markup=keyboard)
     input_msg = await bot.listen(editable.chat.id)
     try:
         if input_msg.text.lower() == "144":
-            raw_text2 = '144'
-            quality = f"{raw_text2}p"
-            res = '256x144'
+            globals.raw_text2 = '144'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '256x144'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "240":
-            raw_text2 = '240'
-            quality = f"{raw_text2}p"
-            res = '426x240'
+            globals.raw_text2 = '240'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '426x240'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "360":
-            raw_text2 = '360'
-            quality = f"{raw_text2}p"
-            res = '640x360'
+            globals.raw_text2 = '360'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '640x360'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "480":
-            raw_text2 = '480'
-            quality = f"{raw_text2}p"
-            res = '854x480'
+            globals.raw_text2 = '480'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '854x480'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "720":
-            raw_text2 = '720'
-            quality = f"{raw_text2}p"
-            res = '1280x720'
+            globals.raw_text2 = '720'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '1280x720'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         elif input_msg.text.lower() == "1080":
-            raw_text2 = '1080'
-            quality = f"{raw_text2}p"
-            res = '1920x1080'
+            globals.raw_text2 = '1080'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '1920x1080'
             await editable.edit(f"✅ Video Quality set {quality} !", reply_markup=keyboard)
         else:
-            raw_text2 = '480'
-            quality = f"{raw_text2}p"
-            res = '854x480'
+            globals.raw_text2 = '480'
+            globals.quality = f"{raw_text2}p"
+            globals.res = '854x480'
             await editable.edit(f"✅ Video Quality set {quality} as Default !", reply_markup=keyboard)
             
     except Exception as e:
@@ -620,7 +593,6 @@ async def handle_quality(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("topic_command"))
 async def video_watermark(client, callback_query):
-    global topic
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"**If you want to enable topic in caption: send /yes or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>", reply_markup=keyboard)
@@ -628,11 +600,11 @@ async def video_watermark(client, callback_query):
 
     try:
         if input_msg.text.lower() == "/yes":
-            topic = "/yes"
+            globals.topic = "/yes"
             await editable.edit(f"**Topic enabled in Caption ✅** !", reply_markup=keyboard)
 
         else:
-            topic = input_msg.text
+            globals.topic = input_msg.text
             await editable.edit(f"Topic disabled in Caption ✅!", reply_markup=keyboard)
 
     except Exception as e:
@@ -642,7 +614,6 @@ async def video_watermark(client, callback_query):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_callback_query(filters.regex("resset_command"))
 async def credit(client, callback_query):
-    global caption, filename, thumb, CR, cwtoken, cptoken, pwtoken, vidwatermark, raw_text2, quality, res, topic
     user_id = callback_query.from_user.id
     keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Back to Settings", callback_data="setttings")]])
     editable = await callback_query.message.edit(f"If you want to reset settings send /yes or Send /no", reply_markup=keyboard)
@@ -650,18 +621,18 @@ async def credit(client, callback_query):
 
     try:
         if input_msg.text.lower() == "/yes":
-            caption = '/cc1'
-            endfilename = '/d'
-            thumb = '/d'
-            CR = f"{CREDIT}"
-            cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
-            cptoken = "cptoken"
-            pwtoken = "pwtoken"
-            vidwatermark = '/d'
-            raw_text2 = '480'
-            quality = '480p'
-            res = '854x480'
-            topic = '/d'
+            globals.caption = '/cc1'
+            globals.endfilename = '/d'
+            globals.thumb = '/d'
+            globals.CR = f"{CREDIT}"
+            globals.cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
+            globals.cptoken = "cptoken"
+            globals.pwtoken = "pwtoken"
+            globals.vidwatermark = '/d'
+            globals.raw_text2 = '480'
+            globals.quality = '480p'
+            globals.res = '854x480'
+            globals.topic = '/d'
             await editable.edit(f"✅ Settings reset as default !", reply_markup=keyboard)
 
         else:
@@ -878,7 +849,6 @@ async def restart_handler(_, m):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("stop") & filters.private)
 async def cancel_handler(client: Client, m: Message):
-    global processing_request, cancel_requested
     if m.chat.id not in AUTH_USERS:
         print(f"User ID not in AUTH_USERS", m.chat.id)
         await bot.send_message(
@@ -889,12 +859,12 @@ async def cancel_handler(client: Client, m: Message):
             f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
         )
     else:
-        if processing_request:
-            cancel_requested = True
+        if globals.processing_request:
+            globals.cancel_requested = True
             await m.delete()
-            cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
+            globals.cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
         else:
-            cancel_message = None
+            globals.cancel_message = None
             await m.reply_text("**⚡ No active process to cancel.**")
             
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
