@@ -827,12 +827,6 @@ async def info(bot: Client, update: Message):
     )
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-
-@bot.on_message(filters.command(["logs"]))
-async def call_send_logs(client: Client, m: Message):  # Correct parameter name
-    await send_logs(client, message)
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["reset"]))
 async def restart_handler(_, m):
     if m.chat.id != OWNER:
@@ -862,7 +856,12 @@ async def cancel_handler(client: Client, m: Message):
             await cancel_message.delete()
         else:
             await m.reply_text("**⚡ No active process to cancel.**")
-            
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command(["logs"]))
+async def call_send_logs(client: Client, m: Message):  # Correct parameter name
+    await send_logs(client, m)
+    
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("addauth") & filters.private)
 async def call_add_auth_user(client: Client, message: Message):
