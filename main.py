@@ -973,7 +973,7 @@ async def restart_handler(_, m):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("stop") & filters.private)
 async def cancel_handler(client: Client, m: Message):
-    global processing_request, cancel_requested
+    #global processing_request, cancel_requested
     if m.chat.id not in AUTH_USERS:
         print(f"User ID not in AUTH_USERS", m.chat.id)
         await bot.send_message(
@@ -984,8 +984,8 @@ async def cancel_handler(client: Client, m: Message):
             f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
         )
     else:
-        if processing_request:
-            cancel_requested = True
+        if globals.processing_request:
+            globals.cancel_requested = True
             await m.delete()
             cancel_message = await m.reply_text("**🚦 Process cancel request received. Stopping after current process...**")
         else:
