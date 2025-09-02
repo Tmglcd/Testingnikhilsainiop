@@ -16,7 +16,7 @@ import cloudscraper
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from base64 import b64encode, b64decode
-from logs import logging
+from logs import send_logs
 from bs4 import BeautifulSoup
 import saini as helper
 from html_handler import html_handler
@@ -829,14 +829,8 @@ async def info(bot: Client, update: Message):
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 
 @bot.on_message(filters.command(["logs"]))
-async def send_logs(client: Client, m: Message):  # Correct parameter name
-    try:
-        with open("logs.txt", "rb") as file:
-            sent = await m.reply_text("**📤 Sending you ....**")
-            await m.reply_document(document=file)
-            await sent.delete()
-    except Exception as e:
-        await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
+async def call_send_logs(client: Client, m: Message):  # Correct parameter name
+    await send_logs(client, message)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command(["reset"]))
@@ -879,7 +873,7 @@ async def call_add_auth_user(client: Client, message: Message):
 async def call_list_auth_users(client: Client, message: Message):
     await list_auth_users(client, message)
     
-    # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("rmauth") & filters.private)
 async def call_remove_auth_user(client: Client, message: Message):
     await remove_auth_user(client, message)
