@@ -120,10 +120,10 @@ async def ytm_handler(bot: Client, m: Message):
  
     try:
         for i in range(arg-1, len(links)):  # Iterate over each link
-            if cancel_requested:
+            if globals.cancel_requested:
                 await m.reply_text("🚦**STOPPED**🚦")
-                processing_request = False
-                cancel_requested = False
+                globals.processing_request = False
+                globals.cancel_requested = False
                 return
             Vxy = links[i][1].replace("www.youtube-nocookie.com/embed", "youtu.be")
             url = "https://" + Vxy
