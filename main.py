@@ -19,8 +19,8 @@ from base64 import b64encode, b64decode
 from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
-import txthtml
-from yt_handler import ytm_handler, y2t_handler
+import html_handler
+from youtube_handler import ytm_handler, y2t_handler
 from utils import progress_bar
 from vars import API_ID, API_HASH, BOT_TOKEN, OWNER, CREDIT, AUTH_USERS, TOTAL_USERS, cookies_file_path
 from aiohttp import ClientSession
@@ -1168,11 +1168,11 @@ async def txt_handler(bot: Client, message: Message):
     with open(file_path, "r") as f:
         file_content = f.read()
 
-    urls = txthtml.extract_names_and_urls(file_content)
+    urls = html_handler.extract_names_and_urls(file_content)
 
-    videos, pdfs, others = txthtml.categorize_urls(urls)
+    videos, pdfs, others = html_handler.categorize_urls(urls)
 
-    html_content = txthtml.generate_html(file_name, videos, pdfs, others)
+    html_content = html_handler.generate_html(file_name, videos, pdfs, others)
     html_file_path = file_path.replace(".txt", ".html")
     with open(html_file_path, "w") as f:
         f.write(html_content)
