@@ -20,6 +20,8 @@ from logs import logging
 from bs4 import BeautifulSoup
 import saini as helper
 import html_handler
+from authorisation import add_auth_user, list_auth_users, remove_auth_user
+from broadcast import broadcast_handler, broadusers_handler
 from text_handler import text_to_txt
 from youtube_handler import ytm_handler, y2t_handler, getcookies_handler, cookies_handler
 from utils import progress_bar
@@ -95,123 +97,6 @@ image_urls = [
     "https://tinypic.host/images/2025/02/07/DeWatermark.ai_1738952933236-1.png",
     # Add more image URLs as needed
 ]
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("addauth") & filters.private)
-async def add_auth_user(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return 
-    try:
-        new_user_id = int(message.command[1])
-        if new_user_id in AUTH_USERS:
-            await message.reply_text("**User ID is already authorized.**")
-        else:
-            AUTH_USERS.append(new_user_id)
-            await message.reply_text(f"**User ID `{new_user_id}` added to authorized users.**")
-            await bot.send_message(chat_id=new_user_id, text=f"<b>Great! You are added in Premium Membership!</b>")
-    except (IndexError, ValueError):
-        await message.reply_text("**Please provide a valid user ID.**")
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("users") & filters.private)
-async def list_auth_users(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return
-    
-    user_list = '\n'.join(map(str, AUTH_USERS))  # AUTH_USERS ki list dikhayenge
-    await message.reply_text(f"**Authorized Users:**\n{user_list}")
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("rmauth") & filters.private)
-async def remove_auth_user(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return
-    
-    try:
-        user_id_to_remove = int(message.command[1])
-        if user_id_to_remove not in AUTH_USERS:
-            await message.reply_text("**User ID is not in the authorized users list.**")
-        else:
-            AUTH_USERS.remove(user_id_to_remove)
-            await message.reply_text(f"**User ID `{user_id_to_remove}` removed from authorized users.**")
-            await bot.send_message(chat_id=user_id_to_remove, text=f"<b>Oops! You are removed from Premium Membership!</b>")
-    except (IndexError, ValueError):
-        await message.reply_text("**Please provide a valid user ID.**")
-
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("broadcast") & filters.private)
-async def broadcast_handler(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return
-    if not message.reply_to_message:
-        await message.reply_text("**Reply to any message (text, photo, video, or file) with /broadcast to send it to all users.**")
-        return
-    success = 0
-    fail = 0
-    for user_id in list(set(TOTAL_USERS)):
-        try:
-            # Text
-            if message.reply_to_message.text:
-                await client.send_message(user_id, message.reply_to_message.text)
-            # Photo
-            elif message.reply_to_message.photo:
-                await client.send_photo(
-                    user_id,
-                    photo=message.reply_to_message.photo.file_id,
-                    caption=message.reply_to_message.caption or ""
-                )
-            # Video
-            elif message.reply_to_message.video:
-                await client.send_video(
-                    user_id,
-                    video=message.reply_to_message.video.file_id,
-                    caption=message.reply_to_message.caption or ""
-                )
-            # Document
-            elif message.reply_to_message.document:
-                await client.send_document(
-                    user_id,
-                    document=message.reply_to_message.document.file_id,
-                    caption=message.reply_to_message.caption or ""
-                )
-            else:
-                await client.forward_messages(user_id, message.chat.id, message.reply_to_message.message_id)
-
-            success += 1
-        except (FloodWait, PeerIdInvalid, UserIsBlocked, InputUserDeactivated):
-            fail += 1
-            continue
-        except Exception as e:
-            fail += 1
-            continue
-
-    await message.reply_text(f"<b>Broadcast complete!</b>\n<blockquote><b>✅ Success: {success}\n❎ Failed: {fail}</b></blockquote>")
-# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
-@bot.on_message(filters.command("broadusers") & filters.private)
-async def broadusers_handler(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return
-
-    if not TOTAL_USERS:
-        await message.reply_text("**No Broadcasted User**")
-        return
-
-    user_infos = []
-    for user_id in list(set(TOTAL_USERS)):
-        try:
-            user = await client.get_users(int(user_id))
-            fname = user.first_name if user.first_name else " "
-            user_infos.append(f"[{user.id}](tg://openmessage?user_id={user.id}) | `{fname}`")
-        except Exception:
-            user_infos.append(f"[{user.id}](tg://openmessage?user_id={user.id})")
-
-    total = len(user_infos)
-    text = (
-        f"<blockquote><b>Total Users: {total}</b></blockquote>\n\n"
-        "<b>Users List:</b>\n"
-        + "\n".join(user_infos)
-    )
-    await message.reply_text(text)
 
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
@@ -1004,6 +889,33 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
     except Exception as e:
         await m.reply_text(f"**Error sending logs:**\n<blockquote>{e}</blockquote>")
 
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("addauth") & filters.private)
+async def call_add_auth_user(client: Client, message: Message):
+    await add_auth_user(client, m)
+
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("users") & filters.private)
+async def call_list_auth_users(client: Client, message: Message):
+    await list_auth_users(client, m)
+    
+    # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("rmauth") & filters.private)
+async def call_remove_auth_user(client: Client, message: Message):
+    await remove_auth_user(client, m)
+    
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("broadcast") & filters.private)
+async def call_broadcast_handler(client: Client, message: Message):
+    await broadcast_handler(client, m)
+    
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
+@bot.on_message(filters.command("broadusers") & filters.private)
+async def call_broadusers_handler(client: Client, message: Message):
+    await broadusers_handler(client, m)
+    
+# .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
 @bot.on_message(filters.command("cookies") & filters.private)
 async def call_cookies_handler(client: Client, m: Message):
