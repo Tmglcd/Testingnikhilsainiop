@@ -8,8 +8,8 @@ from pyromod import listen
 from pyrogram import Client
 from pyrogram.types import Message
 from pyrogram.errors import FloodWait
-from vars import CREDIT
-from vars import cookies_file_path, AUTH_USERS
+from vars import CREDIT, cookies_file_path, AUTH_USERS
+import globals
 
 #==============================================================================================================================
 async def cookies_handler(client: Client, m: Message):
@@ -61,9 +61,9 @@ async def getcookies_handler(client: Client, m: Message):
 
 #==========================================================================================================================================================================================
 async def ytm_handler(bot: Client, m: Message):
-    global processing_request, cancel_requested
-    processing_request = True
-    cancel_requested = False
+    #global processing_request, cancel_requested
+    globals.processing_request = True
+    globals.cancel_requested = False
     editable = await m.reply_text("**Input Type**\n\n<blockquote><b>01 •Send me the .txt file containing YouTube links\n02 •Send Single link or Set of YouTube multiple links</b></blockquote>")
     input: Message = await bot.listen(editable.chat.id)
     if input.document and input.document.file_name.endswith(".txt"):
