@@ -17,7 +17,7 @@ async def add_auth_user(client: Client, message: Message):
         else:
             AUTH_USERS.append(new_user_id)
             await message.reply_text(f"**User ID `{new_user_id}` added to authorized users.**")
-            await bot.send_message(chat_id=new_user_id, text=f"<b>Great! You are added in Premium Membership!</b>")
+            await client.send_message(chat_id=new_user_id, text=f"<b>Great! You are added in Premium Membership!</b>")
     except (IndexError, ValueError):
         await message.reply_text("**Please provide a valid user ID.**")
 # .....,.....,.......,...,.......,....., .....,.....,.......,...,.......,.....,
@@ -42,7 +42,7 @@ async def remove_auth_user(client: Client, message: Message):
         else:
             AUTH_USERS.remove(user_id_to_remove)
             await message.reply_text(f"**User ID `{user_id_to_remove}` removed from authorized users.**")
-            await bot.send_message(chat_id=user_id_to_remove, text=f"<b>Oops! You are removed from Premium Membership!</b>")
+            await client.send_message(chat_id=user_id_to_remove, text=f"<b>Oops! You are removed from Premium Membership!</b>")
     except (IndexError, ValueError):
         await message.reply_text("**Please provide a valid user ID.**")
           
