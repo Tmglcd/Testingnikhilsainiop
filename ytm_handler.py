@@ -4,7 +4,7 @@ import asyncio
 from pyrogram import Client
 from pyrogram.types import Message
 from vars import CREDIT
-from main import cookies_file_path, AUTH_USERS
+from vars import cookies_file_path, AUTH_USERS
 from pyrogram.errors import FloodWait
 
 async def ytm_handler(bot: Client, m: Message):
