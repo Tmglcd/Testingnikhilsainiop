@@ -5,6 +5,8 @@ from vars import CREDIT
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
+#==================================================================================================================================
+
 # Function to extract names and URLs from the text file
 def extract_names_and_urls(file_content):
     lines = file_content.strip().split("\n")
@@ -14,6 +16,8 @@ def extract_names_and_urls(file_content):
             name, url = line.split(":", 1)
             data.append((name.strip(), url.strip()))
     return data
+
+#==================================================================================================================================
 
 # Function to categorize URLs
 def categorize_urls(urls):
@@ -47,6 +51,8 @@ def categorize_urls(urls):
             others.append((name, url))
 
     return videos, pdfs, others
+
+#=================================================================================================================================
 
 # Function to generate HTML file with Video.js player
 def generate_html(file_name, videos, pdfs, others):
@@ -420,3 +426,36 @@ def generate_html(file_name, videos, pdfs, others):
 def download_video(url, output_path):
     command = f"ffmpeg -i {url} -c copy {output_path}"
     subprocess.run(command, shell=True, check=True)
+
+
+
+
+#======================================================================================================================================================================================
+
+async def txt_handler(bot: Client, message: Message):
+    editable = await message.reply_text("𝐖𝐞𝐥𝐜𝐨𝐦𝐞! 𝐏𝐥𝐞𝐚𝐬𝐞 𝐮𝐩𝐥𝐨𝐚𝐝 𝐚 .𝐭𝐱𝐭 𝐟𝐢𝐥𝐞 𝐜𝐨𝐧𝐭𝐚𝐢𝐧𝐢𝐧𝐠 𝐔𝐑𝐋𝐬.✓")
+    input: Message = await bot.listen(editable.chat.id)
+    if input.document and input.document.file_name.endswith('.txt'):
+        file_path = await input.download()
+        file_name, ext = os.path.splitext(os.path.basename(file_path))
+        b_name = file_name.replace('_', ' ')
+    else:
+        await message.reply_text("**• Invalid file input.**")
+        return
+           
+    with open(file_path, "r") as f:
+        file_content = f.read()
+
+    urls = html_handler.extract_names_and_urls(file_content)
+
+    videos, pdfs, others = html_handler.categorize_urls(urls)
+
+    html_content = html_handler.generate_html(file_name, videos, pdfs, others)
+    html_file_path = file_path.replace(".txt", ".html")
+    with open(html_file_path, "w") as f:
+        f.write(html_content)
+
+    await message.reply_document(document=html_file_path, caption=f"✅𝐒𝐮𝐜𝐜𝐞𝐬𝐬𝐟𝐮𝐥𝐥𝐲 𝐃𝐨𝐧𝐞!\n<blockquote><b>`{b_name}`</b></blockquote>\n❖**Open in Chrome.**\n\n🌟**Extracted By : {CREDIT}**")
+    os.remove(file_path)
+    os.remove(html_file_path)
+    
